@@ -47,6 +47,7 @@ HTSlib URL scheme handlers present:
 dir2
 
 ##3. Making files in different directories
+
 (bioinfo) [axd6044@p-sc-2366 Week01]$ ls
 newdir  README.md
 (bioinfo) [axd6044@p-sc-2366 Week01]$ cd newdir/
