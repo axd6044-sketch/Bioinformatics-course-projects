@@ -37,7 +37,7 @@ HTSlib URL scheme handlers present:
     mem:         mem
 (bioinfo) [axd6044@p-sc-2366 Week01]$ 
 
-### 2. Making nested directories 
+##2. Making nested directories 
 (bioinfo) [axd6044@p-sc-2366 Week01]$ mkdir newdir
 (bioinfo) [axd6044@p-sc-2366 Week01]$ cd newdir/
 (bioinfo) [axd6044@p-sc-2366 newdir]$ mkdir dir1
