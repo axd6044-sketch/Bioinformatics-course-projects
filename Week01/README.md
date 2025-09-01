@@ -3,7 +3,6 @@ I have made a github repository and cloned it.
 
 #1 samtools version
 
-
 [axd6044@p-sc-2366 Week01]$ conda activate bioinfo
 (bioinfo) [axd6044@p-sc-2366 Week01]$  samtools --version
 samtools 1.22.1
