@@ -4,16 +4,19 @@ I have made a github repository and cloned it.
 # Week 1 Assignment
 
 ## 1. Samtools Version
+### INPUT
 ```bash
 conda activate bioinfo
 samtools --version
-
+```
+### OUTPUT
+```
 samtools 1.22.1
 Using htslib 1.22.1
 Copyright (C) 2025 Genome Research Ltd.
 ```
-
 ## 2. Making nested directories
+### INPUT
 ```bash
 mkdir newdir
 cd newdir/
