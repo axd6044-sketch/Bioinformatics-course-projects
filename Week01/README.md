@@ -36,14 +36,22 @@ newdir  README.md
 dir1  newdir.txt
 ```
 ## 4. Relative and absolute paths
+### relative path 
+### Input
 ```
-##relative path 
 (bioinfo) [axd6044@p-sc-2366 Bioinformatics-course-projects]$ cd Week01/newdir/dir1/
 (bioinfo) [axd6044@p-sc-2366 dir1]$ ls ../../..
+```
+### Input
+```
 README.md  Week01
 ```
 ## absolute path
+### Input
 ```
 [axd6044@p-sc-2366 Bioinformatics-course-projects]$ cd ~/scratch/Bioinformatics-course-projects/Week01/newdir/dir1/dir2/'
+```
+### Output
+```
 [axd6044@p-sc-2366 dir2]$ 
 ```
