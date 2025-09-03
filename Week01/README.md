@@ -12,14 +12,17 @@ samtools 1.22.1
 Using htslib 1.22.1
 Copyright (C) 2025 Genome Research Ltd.
 
-## 2. Making nested directories 
+```bash
+
+## 2. Making nested directories
+```bash
 mkdir newdir
 cd newdir/
 mkdir dir1
 cd dir1/
 mkdir dir2
 ls
-
+```bash
 
 ## 2. Making nested directories 
 (bioinfo) [axd6044@p-sc-2366 Week01]$ mkdir newdir
