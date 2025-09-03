@@ -24,22 +24,23 @@ ls
 ```
 
 ## 3. Making files in different directories
-
+```
 (bioinfo) [axd6044@p-sc-2366 Week01]$ ls
 newdir  README.md
 (bioinfo) [axd6044@p-sc-2366 Week01]$ cd newdir/
 (bioinfo) [axd6044@p-sc-2366 newdir]$ touch newdir.txt
 (bioinfo) [axd6044@p-sc-2366 newdir]$ ls
 dir1  newdir.txt
-
+```
 ## 4. Relative and absolute paths
-
+```
 ##relative path 
 (bioinfo) [axd6044@p-sc-2366 Bioinformatics-course-projects]$ cd Week01/newdir/dir1/
 (bioinfo) [axd6044@p-sc-2366 dir1]$ ls ../../..
 README.md  Week01
-
+```
 ## absolute path
-
+```
 [axd6044@p-sc-2366 Bioinformatics-course-projects]$ cd ~/scratch/Bioinformatics-course-projects/Week01/newdir/dir1/dir2/'
 [axd6044@p-sc-2366 dir2]$ 
+```
