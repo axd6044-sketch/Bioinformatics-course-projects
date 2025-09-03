@@ -30,9 +30,15 @@ ls
 ```
 (bioinfo) [axd6044@p-sc-2366 Week01]$ ls
 newdir  README.md
+```
+### Input
+```
 (bioinfo) [axd6044@p-sc-2366 Week01]$ cd newdir/
 (bioinfo) [axd6044@p-sc-2366 newdir]$ touch newdir.txt
 (bioinfo) [axd6044@p-sc-2366 newdir]$ ls
+```
+### Output 
+```
 dir1  newdir.txt
 ```
 ## 4. Relative and absolute paths
