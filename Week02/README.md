@@ -21,7 +21,8 @@ Found widely in South and Southeast Asia "
 ### Input
 ```
 grep '^##sequence-region' Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v OOHO | cut -f 1 | wc -l
-grep '^##sequence-region' Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v OOHO | cut -f 1 | #this will show the details of the chromosome and we can see chromosome number 20 is missing. And the total becomes 23.
+grep '^##sequence-region' Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v OOHO | cut -f 1
+ #this will show the details of the chromosome and we can see chromosome number 20 is missing. And the total becomes 23.
 ```
 ### Output
 ```
