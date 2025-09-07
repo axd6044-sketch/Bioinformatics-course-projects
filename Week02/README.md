@@ -107,6 +107,7 @@ grep -v '^#' Anabas.gff3 | awk '$3=="gene"' | wc -l
 ## 8. Is there a feature type that you may have not heard about before? What is the feature and how is it defined?  
 ```
 #Feature- Pseudogene
+
 “A sequence that closely resembles a known functional gene, but is generally non-functional as a consequence of mutations that prevent its expression or translation.”
 How they arise:
 Duplication — a gene is copied, but one copy accumulates mutations that disable it.
