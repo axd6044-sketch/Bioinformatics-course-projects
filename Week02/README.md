@@ -9,6 +9,7 @@
 ## 3.Download GFF file using command
 ```
 wget http://ftp.ensembl.org/pub/current_gff3/anabas_testudineus/Anabas_testudineus.fAnaTes1.3.115.gff3.gz
+gunzip Anabas_testudineus.fAnaTes1.3.115.gff3.gz 
 ```
 ## 4.About the organism
 ```
