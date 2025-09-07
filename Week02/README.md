@@ -28,6 +28,30 @@ grep '^##sequence-region' Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v OOHO 
 ```
 23
 
+##sequence-region   1 1 27357120
+##sequence-region   10 1 23456640
+##sequence-region   11 1 22362968
+##sequence-region   12 1 19394341
+##sequence-region   13 1 25912841
+##sequence-region   14 1 19875000
+##sequence-region   15 1 21921250
+##sequence-region   16 1 24434175
+##sequence-region   17 1 23416631
+##sequence-region   18 1 31080915
+##sequence-region   19 1 18693732
+##sequence-region   2 1 34285027
+##sequence-region   21 1 24496341
+##sequence-region   22 1 20982477
+##sequence-region   23 1 15359112
+##sequence-region   24 1 19933469
+##sequence-region   3 1 27937778
+##sequence-region   4 1 26090302
+##sequence-region   5 1 26719370
+##sequence-region   6 1 25063394
+##sequence-region   7 1 25106443
+##sequence-region   8 1 21832553
+##sequence-region   9 1 28519589
+
 # Interpretation :It matches with the expectation of the organism whose diploid chromosome number is 46. 
 # While parsing the annotation file Anabas_testudineus.fAnaTes1.3.115.gff3, I noticed that the ##sequence-region metadata declares only 23 chromosomes:1–19, 21–24 There is no line for chromosome 20.
 ```
