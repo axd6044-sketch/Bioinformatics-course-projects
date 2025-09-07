@@ -1,4 +1,4 @@
- lists the commands that I executed for this assignment
+# Week 02: Genome Annotation Analysis (Anabas testudineus)
 
 ## 1.Go to Ensemble 
 ### http://ftp.ensembl.org/pub/current_gff3/
@@ -155,7 +155,7 @@ cat Anabas.gff3 | cut -f3 | sort | uniq -c | sort -nr | head -10
 ```
 ## 10. Having analyzed this GFF file, does it seem like a complete and well-annotated organism?
 ```
-he GFF3 file appears reasonably comprehensive, with ~24,000 genes, ~64,000 mRNAs, and nearly one million exons and CDS entries. The presence of noncoding RNA categories (lnc_RNA, miRNA, snoRNA, snRNA, rRNA) and pseudogenes indicates that the annotation pipeline attempted to capture a broad range of genomic features, not just protein-coding genes.  It does seem like a complete and well-annotated organism. 
+The GFF3 file appears reasonably comprehensive, with ~24,000 genes, ~64,000 mRNAs, and nearly one million exons and CDS entries. The presence of noncoding RNA categories (lnc_RNA, miRNA, snoRNA, snRNA, rRNA) and pseudogenes indicates that the annotation pipeline attempted to capture a broad range of genomic features, not just protein-coding genes.  It does seem like a complete and well-annotated organism. 
 ```
 
 ## 11.Other insights
