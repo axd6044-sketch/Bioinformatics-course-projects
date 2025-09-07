@@ -4,7 +4,7 @@
 ### http://ftp.ensembl.org/pub/current_gff3/
 
 ## 2. Organism chosen -
-### anabas_testudineus
+### anabas_testudineus (http://ftp.ensembl.org/pub/current_gff3/anabas_testudineus/)
 
 ## 3.Download GFF file using command
 ```
