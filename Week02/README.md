@@ -60,7 +60,7 @@ grep '^##sequence-region' Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v OOHO 
 ```
 cat Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v '#' > Anabas.gff3 #removing all comments
 ls -lh #checking file
-cat Anabas.gff3 | wc -l #counting the lines to count total features
+cat Anabas.gff3 | wc -l #counts the lines to count total features
 ```
 ### Output 
 ```
@@ -76,7 +76,7 @@ total 647M
 ## 7.How many genes are listed for this organism?
 ### Input
 ```
-grep -v '^#' Anabas.gff3 | awk '$3=="gene"' | wc -l #look for the term gene only and counts how many
+grep -v '^#' Anabas.gff3 | awk '$3=="gene"' | wc -l #looks for the term gene only and counts how many
 ```
 ### Output 
 ```
@@ -97,8 +97,8 @@ A pseudogene feature marks the genomic coordinates of such a gene. Often, you’
 ## 9. What are the top-ten most annotated feature types (column 3) across the genome?
 ### Input
 ```
-cat Anabas.gff3 | cut -f 3 | sort | uniq -c | sort -rn
-cat Anabas.gff3 | cut -f3 | sort | uniq -c | sort -nr | head -10
+cat Anabas.gff3 | cut -f 3 | sort | uniq -c | sort -rn #to see the features in order
+cat Anabas.gff3 | cut -f3 | sort | uniq -c | sort -nr | head -10 #lists the top 10 features only 
 ```
 ### Output 
 ```
@@ -137,7 +137,7 @@ cat Anabas.gff3 | cut -f3 | sort | uniq -c | sort -nr | head -10
 ```
 ## 10. Having analyzed this GFF file, does it seem like a complete and well-annotated organism?
 ```
-The GFF3 file appears reasonably comprehensive, with ~24,000 genes, ~64,000 mRNAs, and nearly one million exons and CDS entries. The presence of noncoding RNA categories (lnc_RNA, miRNA, snoRNA, snRNA, rRNA) and pseudogenes indicates that the annotation pipeline attempted to capture a broad range of genomic features, not just protein-coding genes.  It does seem like a complete and well-annotated organism. 
+The GFF3 file appears reasonably comprehensive, with ~24,000 genes, ~64,000 mRNAs, and nearly one million exons and CDS entries. The presence of noncoding RNA categories (lnc_RNA, miRNA, snoRNA, snRNA, rRNA) and pseudogenes indicates that the annotation pipeline attempted to capture a broad range of genomic features, not just protein-coding genes.  It does seem like a complete and well-annotated organism.
 ```
 
 ## 11.Other insights
