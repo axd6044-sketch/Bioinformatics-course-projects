@@ -76,7 +76,7 @@ total 647M
 ## 7.How many genes are listed for this organism?
 ### Input
 ```
-grep -v '^#' Anabas.gff3 | awk '$3=="gene"' | wc -l
+grep -v '^#' Anabas.gff3 | awk '$3=="gene"' | wc -l #look for the term gene only and counts how many
 ```
 ### Output 
 ```
@@ -87,12 +87,12 @@ grep -v '^#' Anabas.gff3 | awk '$3=="gene"' | wc -l
 #Feature- Pseudogene
 
 “A sequence that closely resembles a known functional gene, but is generally non-functional as a consequence of mutations that prevent its expression or translation.”
-How they arise:
+"How they arise:
 Duplication — a gene is copied, but one copy accumulates mutations that disable it.
 Retrotransposition — an mRNA is reverse-transcribed back into DNA and inserted into the genome, but lacks proper regulatory elements.
 Unitary loss — the only copy of a gene in the genome becomes nonfunctional through mutations.
 In annotations (like this  GFF3):
-A pseudogene feature marks the genomic coordinates of such a gene. Often, you’ll also see pseudogenic_transcript entries beneath them, representing the “ghost” transcripts they would have produced.
+A pseudogene feature marks the genomic coordinates of such a gene. Often, you’ll also see pseudogenic_transcript entries beneath them, representing the “ghost” transcripts they would have produced."
 ```
 ## 9. What are the top-ten most annotated feature types (column 3) across the genome?
 ### Input
