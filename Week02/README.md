@@ -60,8 +60,7 @@ grep '^##sequence-region' Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v OOHO 
 ```
 cat Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v '#' > Anabas.gff3
 ls -lh
-cat Anabas.gff3 | cut -f 3 | sort | uniq -c 
-cat Anabas.gff3 | cut -f 3 | sort | uniq | wc -l
+cat Anabas.gff3 | wc -l
 ```
 ### Output 
 ```
@@ -70,29 +69,8 @@ total 647M
 -rw-rw-r-- 1 axd6044 axd6044_collab 324M Jul 10 19:02 Anabas_testudineus.fAnaTes1.3.115.gff3
 -rw-rw-r-- 1 axd6044 axd6044_collab 1.2K Sep  7 09:52 README.md
 
-#The features of this file
- 914601 CDS 
- 938673 exon
-  51602 five_prime_UTR
-  23996 gene
-   1832 lnc_RNA
-     97 miRNA
-  64517 mRNA
-   1904 ncRNA_gene
-    137 pseudogene
-    137 pseudogenic_transcript
-     50 region
-    138 rRNA
-      7 scRNA
-    203 snoNA
-    207 snRNA
-  43764 three_prime_UTR
-     10 transcript
-      4 V_gene_segment
-      1 Y_RNogenic_transcript
-
 #Counting the number of features
-19
+2041880
 
 ```
 ## 7.How many genes are listed for this organism?
