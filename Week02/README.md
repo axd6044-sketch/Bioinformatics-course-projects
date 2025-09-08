@@ -58,9 +58,9 @@ grep '^##sequence-region' Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v OOHO 
 ## 6.How many features does the file contain?
 ### Input
 ```
-cat Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v '#' > Anabas.gff3
-ls -lh
-cat Anabas.gff3 | wc -l
+cat Anabas_testudineus.fAnaTes1.3.115.gff3 | grep -v '#' > Anabas.gff3 #removing all comments
+ls -lh #checking file
+cat Anabas.gff3 | wc -l #counting the lines to count total features
 ```
 ### Output 
 ```
