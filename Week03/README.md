@@ -8,7 +8,7 @@ wget https://ftp.ensemblgenomes.ebi.ac.uk/pub/bacteria/current/fasta/bacteria_0_
 gunzip Agrobacterium_fabrum_str_c58_gca_000092025.ASM9202v1.dna.toplevel.fa.gz 
 mv Agrobacterium_fabrum_str_c58_gca_000092025.ASM9202v1.dna.toplevel.fa Afab.fa
 cat Afab.fa | grep ">"
-'''
+```
 ### Output
 ```
 >At dna:plasmid plasmid:ASM9202v1:At:1:542868:1 REF
