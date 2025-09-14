@@ -19,7 +19,7 @@ cat Afab.fa | grep ">"
 This can be visualized in IGV as :
 <img src="images/img1.png" alt="image" width="800">
 
-## Genome size and features
+## 2. Check genome size and features
 ### Input 
 ```
 wget https://ftp.ensemblgenomes.ebi.ac.uk/pub/bacteria/current/gff3/bacteria_0_collection/agrobacterium_fabrum_str_c58_gca_000092025/Agrobacterium_fabrum_str_c58_gca_000092025.ASM9202v1.62.gff3.gz
@@ -43,7 +43,7 @@ linear
 Ti
 
 ```
-## Gene | Transcript separation
+## 3. Perform Gene | Transcript separation
 ### input
 ```
 grep -i -E "gene|transcript" Afab.gff3 > genetranscriptAfab.gff3
@@ -57,11 +57,11 @@ At      ena     mRNA    70      1377    .       +       .       ID=transcript:AA
 At      ena     exon    70      1377    .       +       .       Parent=transcript:AAK90380;Name=AAK90380-1;constitutive=1;ensembl_end_phase=0;ensembl_phase=0;exon_id=AAK90380-1;rank=1
 At      ena     CDS     70      1377    .       +       0       ID=CDS:AAK90380;Parent=transcript:AAK90380;protein_id=AAK90380
 ```
-## Visualize the simplified GFF in IGV as a separate track. Compare the visualization of the original GFF with the simplified GFF.
+## 4. Visualize the simplified GFF in IGV as a separate track. Compare the visualization of the original GFF with the simplified GFF.
 ### The original gff3 file showed full detailed gene features like gene, mRNA, exon, pseudogene but in the simplified GFF we can see only the transcripts no exon, CDS, UTRs. We see a box spanning from transcript start to transcript end, without intron–exon breakdown.
 <img src="images/img2.png" alt="image" width="800">
 
-## Zoom in to see the sequences, expand the view to show the translation table in IGV. Note how the translation table needs to be displayed in the correct orientation for it to make sense.
+## 5. Zoom in to see the sequences, expand the view to show the translation table in IGV. Note how the translation table needs to be displayed in the correct orientation for it to make sense.
 In the two images below I have zoomed in to see the sequence and we can see two genes transcribing in the opposite directions therefore I took two images one in forward direction (Image 3) and one in reverse direction (Image 4)
 We can observe 
 In the forward direction
@@ -69,7 +69,7 @@ In the forward direction
 In the reverse direction
 <img src="images/img4.png" alt="image" width="800">
 
-## Visually verify that the first coding sequence of a gene starts with a start codon and that the last coding sequence of a gene ends with a stop codon.
+## 6. Visually verify that the first coding sequence of a gene starts with a start codon and that the last coding sequence of a gene ends with a stop codon.
 In this image we can see two genes one ending with the stop codon and the next one beginning with a start codon coding for methionine
 
 <img src="images/img5.png" alt="image" width="800">
