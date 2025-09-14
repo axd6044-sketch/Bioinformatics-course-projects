@@ -15,10 +15,10 @@ cat Afab.fa | grep ">"
 >Ti dna:plasmid plasmid:ASM9202v1:Ti:1:214233:1 REF
 >circular dna:chromosome chromosome:ASM9202v1:circular:1:2841580:1 REF
 >linear dna:chromosome chromosome:ASM9202v1:linear:1:2075577:1 REF
-
+```
 This can be visualized in IGV as :
 <img src="images/img1.png" alt="image" width="800">
-```
+
 ## Genome size and features
 ### Input 
 ```
