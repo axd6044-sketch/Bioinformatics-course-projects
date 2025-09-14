@@ -58,7 +58,7 @@ At      ena     exon    70      1377    .       +       .       Parent=transcrip
 At      ena     CDS     70      1377    .       +       0       ID=CDS:AAK90380;Parent=transcript:AAK90380;protein_id=AAK90380
 ```
 ## 4. Visualize the simplified GFF in IGV as a separate track. Compare the visualization of the original GFF with the simplified GFF.
-### The original gff3 file showed full detailed gene features like gene, mRNA, exon, pseudogene but in the simplified GFF we can see only the transcripts no exon, CDS, UTRs. We see a box spanning from transcript start to transcript end, without intron–exon breakdown.
+The original gff3 file showed full detailed gene features like gene, mRNA, exon, pseudogene but in the simplified GFF we can see only the transcripts no exon, CDS, UTRs. We see a box spanning from transcript start to transcript end, without intron–exon breakdown.
 <img src="images/img2.png" alt="image" width="800">
 
 ## 5. Zoom in to see the sequences, expand the view to show the translation table in IGV. Note how the translation table needs to be displayed in the correct orientation for it to make sense.
