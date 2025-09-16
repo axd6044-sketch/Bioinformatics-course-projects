@@ -66,6 +66,7 @@ In the two images below I have zoomed in to see the sequence and we can see two 
 We can observe 
 In the forward direction
 <img src="images/img3.png" alt="image" width="800">
+
 In the reverse direction
 <img src="images/img4.png" alt="image" width="800">
 
@@ -75,4 +76,5 @@ In this image we can see two genes one ending with the stop codon and the next o
 <img src="images/img5.png" alt="image" width="800">
 
 In this image we can observe an overlapping of genes in the prokaryote genome both are minus strand. both impJ and impJ-1 may be part of the same operon, but they encode different proteins despite overlapping sequence.
+
 <img src="images/img6.png" alt="image" width="800">
