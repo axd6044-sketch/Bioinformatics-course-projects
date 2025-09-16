@@ -64,10 +64,12 @@ The original gff3 file showed full detailed gene features like gene, mRNA, exon,
 ## 5. Zoom in to see the sequences, expand the view to show the translation table in IGV. Note how the translation table needs to be displayed in the correct orientation for it to make sense.
 In the two images below I have zoomed in to see the sequence and we can see two genes transcribing in the opposite directions therefore I took two images one in forward direction (Image 3) and one in reverse direction (Image 4)
 We can observe 
-In the forward direction
+In the forward direction 
+
 <img src="images/img3.png" alt="image" width="800">
 
 In the reverse direction
+
 <img src="images/img4.png" alt="image" width="800">
 
 ## 6. Visually verify that the first coding sequence of a gene starts with a start codon and that the last coding sequence of a gene ends with a stop codon.
