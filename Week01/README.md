@@ -28,14 +28,14 @@ ls
 
 ## 3. Making files in different directories
 ```
-(bioinfo) [axd6044@p-sc-2366 Week01]$ ls
+ls
 newdir  README.md
 ```
 ### Input
 ```
-(bioinfo) [axd6044@p-sc-2366 Week01]$ cd newdir/
-(bioinfo) [axd6044@p-sc-2366 newdir]$ touch newdir.txt
-(bioinfo) [axd6044@p-sc-2366 newdir]$ ls
+cd newdir/
+touch newdir.txt
+ls
 ```
 ### Output 
 ```
@@ -45,8 +45,8 @@ dir1  newdir.txt
 ### relative path 
 ### Input
 ```
-(bioinfo) [axd6044@p-sc-2366 Bioinformatics-course-projects]$ cd Week01/newdir/dir1/
-(bioinfo) [axd6044@p-sc-2366 dir1]$ ls ../../..
+cd Week01/newdir/dir1/
+ls ../../..
 ```
 ### Input
 ```
@@ -55,9 +55,9 @@ README.md  Week01
 ## absolute path
 ### Input
 ```
-[axd6044@p-sc-2366 Bioinformatics-course-projects]$ cd ~/scratch/Bioinformatics-course-projects/Week01/newdir/dir1/dir2/'
+cd ~/scratch/Bioinformatics-course-projects/Week01/newdir/dir1/dir2/'
 ```
 ### Output
 ```
-[axd6044@p-sc-2366 dir2]$ 
+$ 
 ```
