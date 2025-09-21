@@ -1,6 +1,6 @@
-#Paper : Zika Virus Targets Human Cortical Neural Precursors and Attenuates Their Growth published in the journal Cell Stem Cell in 2016.
+# Paper : Zika Virus Targets Human Cortical Neural Precursors and Attenuates Their Growth published in the journal Cell Stem Cell in 2016.
 
-##The accession numbers for the genome-
+## The accession numbers for the genome-
 BioProject: PRJNA313294
 GEO series: GSE78711
 strain of the ZIKV, MR766
@@ -64,7 +64,7 @@ datasets summary genome accession GCA_000882815.1
   "total_count": 1
 ```
 
-##The commands to download the data.
+## The commands to download the data.
 ```
 datasets download genome accession GCF_000882815.3 --include genome,gff3,gtf
 datasets download genome accession GCF_000882815.3 --include gff3,rna,cds,protein,genome,seq-report
