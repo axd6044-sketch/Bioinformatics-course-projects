@@ -74,7 +74,8 @@ mv ncbi_dataset/data/GCF_000882815.3/GCF_000882815.3_ViralProj36615_genomic.fna 
 mv ncbi_dataset/data/GCF_000882815.3/ Zikagenome.gff
 ```
 
-## Genome Visualization 
+## Genome Visualization
+The figure is showing a single gene present in the virus genome. Methionine is marked in green indicating first amino acid of the protein (capsid protein).
 <img src="Images/img2.png" alt="image" width="800">
 
 ## Genome Features
@@ -105,7 +106,7 @@ datasets summary genome taxon "Zika virus" \
 #!genome-build ViralProj36615
 #!gff-spec-version 1.21
 ##gff-version 3
-NC_012532.1
+**NC_012532.1**
 #!processor NCBI annotwriter
 ##sequence-region NC_012532.1 1 10794
 ##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=64320
@@ -133,7 +134,12 @@ GCF_004788155.1
 ```
 
 ## To check what are the other accessions which could have been used 
+All the other accessions represent different strains of Zika virus. 
 <img src="Images/img1.png" alt="image" width="800">
 
 ## Questions which could have been asked if other accessions were used
-
+Q1. Using other accession/ strain of a virus, we can ask which mutations distinguish the lineages, and if they are under any positive selection.
+Q2. What are the differences in amino acids which makes the MR766 strain unique 
+Q3. comparing two strains to ask if a mutation in the E (envelope) protein alter the viral entry into human neural progenitor cells (hNPCs)
+Q4. How far has the genome diverged between African (MR766), Asian, and American lineages?
+Q5. 
