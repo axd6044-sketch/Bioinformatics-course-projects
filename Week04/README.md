@@ -76,6 +76,7 @@ mv ncbi_dataset/data/GCF_000882815.3/ Zikagenome.gff
 
 ## Genome Visualization
 The figure is showing a single gene present in the virus genome. Methionine is marked in green indicating first amino acid of the protein (capsid protein).
+
 <img src="Images/img2.png" alt="image" width="800">
 
 ## Genome Features
