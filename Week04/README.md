@@ -75,7 +75,7 @@ mv ncbi_dataset/data/GCF_000882815.3/ Zikagenome.gff
 ```
 
 ## Genome Visualization 
-<img src="images/img2.png" alt="image" width="800">
+<img src="Images/img2.png" alt="image" width="800">
 
 ## Genome Features
 ```
@@ -133,7 +133,7 @@ GCF_004788155.1
 ```
 
 ## To check what are the other accessions which could have been used 
-<img src="images/img1.png" alt="image" width="800">
+<img src="Images/img1.png" alt="image" width="800">
 
 ## Questions which could have been asked if other accessions were used
 
