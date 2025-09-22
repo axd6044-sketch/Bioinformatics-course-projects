@@ -140,7 +140,9 @@ All the other accessions represent different strains of Zika virus.
 
 ## Questions which could have been asked if other accessions were used
 Q1. Using other accession/ strain of a virus, we can ask which mutations distinguish the lineages, and if they are under any positive selection.
+
 Q2. What are the differences in amino acids which makes the MR766 strain unique 
+
 Q3. comparing two strains to ask if a mutation in the E (envelope) protein alter the viral entry into human neural progenitor cells (hNPCs)
+
 Q4. How far has the genome diverged between African (MR766), Asian, and American lineages?
-Q5. 
