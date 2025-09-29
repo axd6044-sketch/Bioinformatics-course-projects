@@ -87,7 +87,7 @@ seqkit stats reads/${SRR_ID}_subsample.fastq
 ```
 chmod +x zika_pipeline.sh
 ```
-## Run the script 
+## Step2 :Run the script 
 ```
 ./zika_pipeline.sh
 ```
@@ -97,13 +97,13 @@ seqkit stats ${SRR_ID}subsample.fastq
 file                        format  type  num_seqs  sum_len  min_len  avg_len  max_len
 SRR3194430_subsample.fastq  FASTQ   DNA      1,000   75,391       35     75.4       76
 ```
-# ---- 8. Quality Control: Evaluating FASTQC report ----
+## Step 3. Quality Control: Evaluating FASTQC report ----
 ```
 echo ">> Running FastQC..."
 mkdir -p fastqc_reports
 fastqc -t 4 -o fastqc_reports reads/${SRR_ID}_subsample.fastq
 ```
-# ----9. Adapter trimming ----
+## Step 4. Adapter trimming ----
 ```
 echo ">> Running cutadapt..."
 mkdir -p trimmed 
@@ -116,7 +116,7 @@ fastqc -t 4 -o fastqc_reports trimmed/${SRR_ID}.trimmed.fastq
 echo "Pipeline Complete"
 ```
 
-# Searched for another dataset SRA for the same genome but uses a different sequencing platform
+## Step 5. Searched for another dataset SRA for the same genome but uses a different sequencing platform
 ## SRA1: SRR3194431 (single-end Illumina nextSeq dataset)
 ## SRA2 : SRR3191544 (paired-end Illumina MiSeq dataset)
 ```
