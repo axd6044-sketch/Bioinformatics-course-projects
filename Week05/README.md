@@ -1,6 +1,6 @@
 # Week 05 Assignment :
 
-This assignment follows the workflow for analyzing the Zika virus MR766 strain used in  Tang et al.Cell Stem Cell (2016). We explore genome download, annotation, sequencing data retrieval,  basic statistics, and quality control. Zika virus, MR766 strain, from the Cell Stem Cell 2016 paper (Tang et al. Cell Stem Cell 2016).
+This assignment follows the workflow for analyzing the Zika virus MR766 strain used in  Tang et al.Cell Stem Cell (2016). I explore genome download, annotation, sequencing data retrieval, basic statistics, and quality control.
 
 ## Identify the BioProject and SRR accession numbers for the sequencing data associated with the publication.
 ### Bioproject - PRJNA313294
