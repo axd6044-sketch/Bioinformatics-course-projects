@@ -8,7 +8,6 @@ This assignment follows the workflow for analyzing the Zika virus MR766 strain u
 ### Genome accession:  - GenBank: GCA_000882815.1  - RefSeq: GCF_000882815.3 
 
 ## Step 1: Write a Bash script:
-
 ### Make a new file
 ```
 nano zika_pipeline.sh
@@ -21,7 +20,7 @@ conda install -c conda-forge jq
 conda install -c bioconda seqkit cutadapt fastqc ncbi-datasets-cli sra-tools
 ```
 ### Content of the script is given below. 
-### Paste from the next line
+Paste this in the script 
 ```#!/usr/bin/env bash
 
 # ---- 1. Download genome + annotation ----
@@ -70,8 +69,7 @@ fasterq-dump --split-files ${SRR_ID} -O reads/
 echo "Single-end detected."
 seqkit stats reads/${SRR_ID}_subsample.fastq
 ```
-### Bash script ends here
-### Save and exit
+### Bash script ends here. Save and exit
 ### Make it executable 
 ```
 chmod +x zika_pipeline.sh
@@ -80,7 +78,7 @@ chmod +x zika_pipeline.sh
 ```
 ./zika_pipeline.sh
 ```
-### The outputs should be - Zikagenome.fa, Zikagenome.gff, genome_summary.txt, read_stats.txt, trimmed/*.fastq
+### The outputs should be - Zikagenome.fa, Zikagenome.gff, ncbi dataset
 
 # ----7. Statistics ----
 cd reads
