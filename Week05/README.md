@@ -59,15 +59,28 @@ SRR_ID="SRR3194430" # single-end Illumina
 echo ">> Prefetching ${SRR_ID}..."
 prefetch ${SRR_ID}
 
+# Download FASTQ
+mkdir -p reads
+fasterq-dump ${SRR_ID} -O reads/
+seqkit stats ${SRR_ID}.fastq
 
 # ---- 6. Subsample reads (~10x coverage) ----
-NREADS=1000
-echo ">> Subsampling ${NREADS} reads ..."
-mkdir -p reads
+# Genome size G: Zika MR766 ≈ 10,794 bp
+# Target coverage C: 10×
+# Read length L: depends on dataset (≈75 bp in my runs, from seqkit stats)
+# For single-end: N ≈ (C × G) / L  → ~1,439 reads needed
+# For paired-end: N ≈ (C × G) / (2 × L) → ~720 pairs needed
+# Adding buffer, I choose ~1,500 reads
 
-fasterq-dump --split-files ${SRR_ID} -O reads/
-echo "Single-end detected."
+NREADS=1500
+echo ">> Subsampling ${NREADS} reads ..."
+
+# Subsample for ~10x coverage
+seqkit sample -n ${NREADS} reads/${SRR_ID}.fastq > reads/${SRR_ID}_subsample.fastq
+
+# Check stats of subsampled file
 seqkit stats reads/${SRR_ID}_subsample.fastq
+
 ```
 ### Bash script ends here. Save and exit
 ### Make it executable 
@@ -79,17 +92,8 @@ chmod +x zika_pipeline.sh
 ./zika_pipeline.sh
 ```
 ### The outputs should be - Zikagenome.fa, Zikagenome.gff, ncbi dataset
-
-# ----7. Statistics ----
 ```
-cd reads
-echo ">> Basic statistics on ${SRR_ID}:" 
-seqkit stats ${SRR_ID}_subsample.fastq
-cd ..
-```
-### Output 
-```
-seqkit stats ${SRR_ID}_subsample.fastq
+seqkit stats ${SRR_ID}subsample.fastq
 file                        format  type  num_seqs  sum_len  min_len  avg_len  max_len
 SRR3194430_subsample.fastq  FASTQ   DNA      1,000   75,391       35     75.4       76
 ```
