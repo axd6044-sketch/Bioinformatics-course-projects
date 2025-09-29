@@ -16,35 +16,27 @@ nano zika_pipeline.sh
 ### Activation requirements before running the script
 ```
 module load anaconda 
-
 conda activate bioinfo
-
 conda install -c conda-forge jq
-conda install -c bioconda seqtk cutadapt fastqc ncbi-datasets-cli sra-tools
+conda install -c bioconda seqkit cutadapt fastqc ncbi-datasets-cli sra-tools
 ```
 ### Content of the script is given below. 
 ### Paste from the next line
 #!/usr/bin/env bash
-
-### Requirements
-#module load anaconda
-#conda activate bioinfo
-#conda install -c conda-forge jq
-#conda install -c bioconda seqkit
-
 
 # ---- 1. Download genome + annotation ----
 echo ">> Downloading genome and annotation..."
 datasets summary genome accession GCA_000882815.1 | jq
 datasets download genome accession GCF_000882815.3 --include genome,gff3,gtf
 unzip ncbi_dataset.zip -d ncbi_dataset -x README.md
+
 # Rename for convenience
 mv ncbi_dataset/ncbi_dataset/data/GCF_000882815.3/GCF_000882815.3_ViralProj36615_genomic.fna Zikagenome.fa
 mv ncbi_dataset/ncbi_dataset/data/GCF_000882815.3/genomic.gff Zikagenome.gff
 
 # ---- 2. Genome size ----
 GENOME_SIZE=$(grep -v ">" Zikagenome.fa | tr -d '\n' | wc -c)
-echo "Genome size (bp): ${GENOME_SIZE}" > genome_summary.txt
+echo "Genome size (bp): ${GENOME_SIZE}" 
 
 # ---- 3. Count features in GFF ----
 echo "Genomic details"
@@ -63,7 +55,7 @@ datasets summary genome taxon "Zika virus" \
   | sort -u
 
 # ---- 5. Download sequence dataset (Bioproject PRJNA313294) ----
-SRR_ID="SRR3194430" # paired-end Illumina
+SRR_ID="SRR3194430" # single-end Illumina
 
 echo ">> Prefetching ${SRR_ID}..."
 prefetch ${SRR_ID}
