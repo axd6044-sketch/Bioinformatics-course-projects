@@ -1,2 +1,2 @@
 # Bioinformatics-course-project
-This has the assignments for BMMB 852 
+This has the weekly assignments for BMMB 852 
