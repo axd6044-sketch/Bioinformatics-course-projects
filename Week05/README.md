@@ -23,7 +23,7 @@ conda install -c bioconda seqtk cutadapt fastqc ncbi-datasets-cli sra-tools
 ### Paste from the next line
 #!/usr/bin/env bash
 
-#Requirements
+### Requirements
 #module load anaconda
 #conda activate bioinfo
 #conda install -c conda-forge jq
