@@ -22,7 +22,7 @@ conda install -c bioconda seqkit cutadapt fastqc ncbi-datasets-cli sra-tools
 ```
 ### Content of the script is given below. 
 ### Paste from the next line
-#!/usr/bin/env bash
+```#!/usr/bin/env bash
 
 # ---- 1. Download genome + annotation ----
 echo ">> Downloading genome and annotation..."
@@ -30,7 +30,7 @@ datasets summary genome accession GCA_000882815.1 | jq
 datasets download genome accession GCF_000882815.3 --include genome,gff3,gtf
 unzip ncbi_dataset.zip -d ncbi_dataset -x README.md
 
-# Rename for convenience
+# ---- Rename for convenience ----
 mv ncbi_dataset/ncbi_dataset/data/GCF_000882815.3/GCF_000882815.3_ViralProj36615_genomic.fna Zikagenome.fa
 mv ncbi_dataset/ncbi_dataset/data/GCF_000882815.3/genomic.gff Zikagenome.gff
 
@@ -69,7 +69,7 @@ mkdir -p reads
 fasterq-dump --split-files ${SRR_ID} -O reads/
 echo "Single-end detected."
 seqkit stats reads/${SRR_ID}_subsample.fastq
-
+```
 ### Bash script ends here
 ### Save and exit
 ### Make it executable 
