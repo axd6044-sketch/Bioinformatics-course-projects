@@ -87,6 +87,12 @@ echo ">> Basic statistics on ${SRR_ID}:"
 seqkit stats ${SRR_ID}_subsample.fastq
 cd ..
 ```
+### Output 
+```
+seqkit stats ${SRR_ID}_subsample.fastq
+file                        format  type  num_seqs  sum_len  min_len  avg_len  max_len
+SRR3194430_subsample.fastq  FASTQ   DNA      1,000   75,391       35     75.4       76
+```
 # ---- 8. Quality Control: Evaluating FASTQC report ----
 ```
 echo ">> Running FastQC..."
@@ -116,6 +122,14 @@ fasterq-dump --split-files ${SRR2} -O SRR2reads/
 ### Basic statistics of SRR2
 seqkit stats SRR2reads/${SRR2}_1.fastq SRR2reads/${SRR2}_2.fastq > SRR2reads/${SRR2}_stats.txt
 fastqc -o fastqc_reports SRR2reads/${SRR2}_1.fastq SRR2reads/${SRR2}_2.fastq
+```
+### Output
+```
+seqkit stats SRR2reads/${SRR2}_1.fastq SRR2reads/${SRR2}_2.fastq
+processed files:  2 / 2 [======================================] ETA: 0s. done
+file                          format  type   num_seqs      sum_len  min_len  avg_len  max_len
+SRR2reads/SRR3191544_1.fastq  FASTQ   DNA   7,361,527  555,374,256       35     75.4       76
+SRR2reads/SRR3191544_2.fastq  FASTQ   DNA   7,361,527  555,388,034       35     75.4       76
 ```
 ### Comparison notes:
 NextSeq single-end (SRR3194431): shorter reads (1×150 bp), uniform quality, smaller files.
