@@ -14,13 +14,14 @@ This assignment follows the workflow for analyzing the Zika virus MR766 strain u
 nano zika_pipeline.sh
 ```
 ### Activation requirements before running the script
+```
 module load anaconda 
 
 conda activate bioinfo
 
 conda install -c conda-forge jq
 conda install -c bioconda seqtk cutadapt fastqc ncbi-datasets-cli sra-tools
-
+```
 ### Content of the script is given below. 
 ### Paste from the next line
 #!/usr/bin/env bash
