@@ -93,7 +93,7 @@ chmod +x zika_pipeline.sh
 ```
 ### The outputs should be - Zikagenome.fa, Zikagenome.gff, ncbi dataset
 ```
-seqkit stats ${SRR_ID}subsample.fastq
+seqkit stats report after subsampling:
 file                        format  type  num_seqs  sum_len  min_len  avg_len  max_len
 SRR3194430_subsample.fastq  FASTQ   DNA      1,000   75,391       35     75.4       76
 ```
@@ -103,6 +103,9 @@ echo ">> Running FastQC..."
 mkdir -p fastqc_reports
 fastqc -t 4 -o fastqc_reports reads/${SRR_ID}_subsample.fastq
 ```
+## Some comments on the FASTQC report --
+1000 sequences subsampled, 35–76 bp (avg ~75 bp) reads, with ~48% GC. Per base sequence quality is Good; Q30+ across most positions, Adapter content is minimal and very few overrepresented sequences. 
+
 ## Step 4. Adapter trimming ----
 ```
 echo ">> Running cutadapt..."
@@ -115,6 +118,10 @@ cutadapt -a AGATCGGAAGAGC \
 fastqc -t 4 -o fastqc_reports trimmed/${SRR_ID}.trimmed.fastq 
 echo "Pipeline Complete"
 ```
+## Comments on FASTQC after trimming ----
+adapters were successfully removed by cutadapt
+The dataset maintains high per-base quality and the correct GC distribution. 
+Only minor overrepresentation of poly-N artifacts remains, which is typical and not concerning.
 
 ## Step 5. Searched for another dataset SRA for the same genome but uses a different sequencing platform
 ## SRA1: SRR3194431 (single-end Illumina nextSeq dataset)
@@ -123,21 +130,41 @@ echo "Pipeline Complete"
 SRR2="SRR3191544"
 prefetch ${SRR2}
 fasterq-dump --split-files ${SRR2} -O SRR2reads/
+
+### Subsample
+### NREADS is already declared as 1500
+
+seqkit sample -n ${NREADS} SRR2reads/${SRR2}_1.fastq > SRR2reads/${SRR2}_subsample_1.fastq
+seqkit sample -n ${NREADS} SRR2reads/${SRR2}_2.fastq > SRR2reads/${SRR2}_subsample_2.fastq
+
 ### Basic statistics of SRR2
 seqkit stats SRR2reads/${SRR2}_1.fastq SRR2reads/${SRR2}_2.fastq > SRR2reads/${SRR2}_stats.txt
 fastqc -o fastqc_reports SRR2reads/${SRR2}_1.fastq SRR2reads/${SRR2}_2.fastq
+
+### Basic statistics of SRR2 after subsampling 
+seqkit stats SRR2reads/${SRR2}_subsample_1.fastq SRR2reads/${SRR2}_subsample_2.fastq
+fastqc -o fastqc_reports SRR2reads/${SRR2}_subsample_1.fastq SRR2reads/${SRR2}_subsample_2.fastq
+
 ```
 ### Output
 ```
-seqkit stats SRR2reads/${SRR2}_1.fastq SRR2reads/${SRR2}_2.fastq
+Stat report after subsampling: 
 processed files:  2 / 2 [======================================] ETA: 0s. done
-file                          format  type   num_seqs      sum_len  min_len  avg_len  max_len
-SRR2reads/SRR3191544_1.fastq  FASTQ   DNA   7,361,527  555,374,256       35     75.4       76
-SRR2reads/SRR3191544_2.fastq  FASTQ   DNA   7,361,527  555,388,034       35     75.4       76
+file                                    format  type  num_seqs  sum_len  min_len  avg_len  max_len
+SRR2reads/SRR3191544_subsample_1.fastq  FASTQ   DNA      1,000   75,477       35     75.5       76
+SRR2reads/SRR3191544_subsample_2.fastq  FASTQ   DNA      1,000   75,510       35     75.5       76
 ```
+
+### Comments on FASTQC report of the paired end MiSeq data SRR3191544 - there will be two reports since there is both forward and reverse reads
+
+### Forward reads:
+There is a strong evidence of Illumina TruSeq adapters toward the 3′ ends. Several flagged, corresponding to adapter sequences and low-complexity stretches. This suggests that trimming is required. 
+### Reverse reads: 
+The reverse reads (R2) are of high quality and consistent with the forward reads (R1).Adapter contamination is present, requiring trimming before mapping or assembly. Interestingly, Unlike R1, no strong overrepresented sequences were detected.
+
 ### Comparison notes:
 NextSeq single-end (SRR3194431): shorter reads (1×150 bp), uniform quality, smaller files.
 
 MiSeq paired-end (SRR3191544): longer reads (2×250 bp), more overlap, but quality drops at 3′ ends.
 
-Both adequately cover the small Zika genome (~10.8 kb). MiSeq may require more trimming.
+Both adequately cover the small Zika genome (~10.8 kb). MiSeq may require more trimming. Both datasets have high-quality bases (Q30+) and appropriate GC (~48%) for Zika virus.
