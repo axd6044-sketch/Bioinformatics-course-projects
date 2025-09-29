@@ -114,7 +114,7 @@ echo "Pipeline Complete"
 
 # Searched for another dataset SRA for the same genome but uses a different sequencing platform
 ## SRA1: SRR3194431 (single-end Illumina nextSeq dataset)
-## SRA : SRR3191544 (paired-end Illumina MiSeq dataset)
+## SRA2 : SRR3191544 (paired-end Illumina MiSeq dataset)
 ```
 SRR2="SRR3191544"
 prefetch ${SRR2}
