@@ -81,17 +81,20 @@ chmod +x zika_pipeline.sh
 ### The outputs should be - Zikagenome.fa, Zikagenome.gff, ncbi dataset
 
 # ----7. Statistics ----
+```
 cd reads
 echo ">> Basic statistics on ${SRR_ID}:" 
 seqkit stats ${SRR_ID}_subsample.fastq
 cd ..
-
+```
 # ---- 8. Quality Control: Evaluating FASTQC report ----
+```
 echo ">> Running FastQC..."
 mkdir -p fastqc_reports
 fastqc -t 4 -o fastqc_reports reads/${SRR_ID}_subsample.fastq
-
+```
 # ----9. Adapter trimming ----
+```
 echo ">> Running cutadapt..."
 mkdir -p trimmed 
 cutadapt -a AGATCGGAAGAGC \
@@ -100,21 +103,20 @@ cutadapt -a AGATCGGAAGAGC \
 
   # Re-run FastQC on trimmed reads
 fastqc -t 4 -o fastqc_reports trimmed/${SRR_ID}.trimmed.fastq 
-
 echo "Pipeline Complete"
-
+```
 
 # Searched for another dataset SRA for the same genome but uses a different sequencing platform
 ## SRA1: SRR3194431 (single-end Illumina nextSeq dataset)
 ## SRA : SRR3191544 (paired-end Illumina MiSeq dataset)
-
+```
 SRR2="SRR3191544"
 prefetch ${SRR2}
 fasterq-dump --split-files ${SRR2} -O SRR2reads/
 ### Basic statistics of SRR2
 seqkit stats SRR2reads/${SRR2}_1.fastq SRR2reads/${SRR2}_2.fastq > SRR2reads/${SRR2}_stats.txt
 fastqc -o fastqc_reports SRR2reads/${SRR2}_1.fastq SRR2reads/${SRR2}_2.fastq
-
+```
 ### Comparison notes:
 NextSeq single-end (SRR3194431): shorter reads (1×150 bp), uniform quality, smaller files.
 
