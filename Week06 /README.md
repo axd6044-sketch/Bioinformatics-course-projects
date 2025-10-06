@@ -1,8 +1,14 @@
-# This week we will make a make file for running script and align sequence data to genome and finally visualize the BAM file in IGV
+# This week’s goal was to automate the workflow for mapping sequence reads to the Zika virus genome using a Makefile, and to visualize the resulting alignments in IGV
 
 ## First:  Making a makefile 
-### the makefile will do the following :
-downloads the reference genome, indexes it, downloads raw reads from the NCBI SRA database, performs read subsampling, aligns reads to the genome, and computes coverage statistics.
+### The Makefile performs the following steps automatically:
+Download the reference Zika genome (MR766 strain).
+Index the genome for alignment.
+Download raw reads from the NCBI SRA database.
+Subsample reads to achieve ~10× genome coverage.
+Align the reads to the genome using bwa mem.
+Compute mapping statistics and coverage using samtools.
+Visualize the aligned reads in IGV.
 
 ### Things to do before calling makefile 
 ```
@@ -13,7 +19,7 @@ Prepare the makefile and run all
 make all
 ```
 
-## Stats 
+## Alignment Statistics 
 ```
 samtools flagstat SRR3194430.bam 
 ```
