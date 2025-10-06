@@ -50,4 +50,7 @@ samtools depth SRR3194430.bam | awk '{sum+=$3} END { print "Average coverage:", 
 ```
 Average coverage: 1409.39
 
+## Visualizing Bam file in IGV 
+<img src="images/img1.png" alt="image" width="800">
+
 
