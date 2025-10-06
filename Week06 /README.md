@@ -27,7 +27,7 @@ MAKEFLAGS += --no-builtin-rules
 
 
 # Zika Virus Genome Pipeline
-# Purpose: Automate genome download, indexing, alignment, feature analysis, and ~10x read subsampling
+# Purpose: Automate genome download, indexing, alignment, feature analysis
 # Usage: make all
 
 # ---- VARIABLES ----
@@ -95,11 +95,11 @@ reads: $(READDIR)/$(SRR_ID).fastq
 # ---- 5. Subsample reads (~10x coverage) ----
 reads/$(SRR_ID)_subsample.fastq: reads
 	@echo ">> Subsampling $(NREADS) reads (~10x coverage)..."
-	seqkit sample -n $(NREADS) $(READDIR)/$(SRR_ID).fastq > $(READDIR)/$(SRR_ID)_subsample.fastq
+	seqkit sample -n $(NREADS) $(READDIR)/$(SRR_ID).fastq > $(READDIR)/$(SRR_ID).fastq
 	seqkit stats $(READDIR)/$(SRR_ID)_subsample.fastq
 	@echo " Subsampling complete."
 
-subsample: reads/$(SRR_ID)_subsample.fastq
+subsample: reads/$(SRR_ID).fastq
 
 # ---- 6. Index genome ----
 index: $(GENOME_FA)
@@ -108,7 +108,7 @@ index: $(GENOME_FA)
 	@echo " Genome indexing complete."
 
 # ---- 7. Align reads to genome ----
-align: index reads/$(SRR_ID)_subsample.fastq
+align: index reads/$(SRR_ID).fastq
 	@echo ">> Aligning reads to genome..."
 	mkdir -p $(ALIGN_PREFIX)
 	bwa mem $(INDEX_PREFIX) $(READDIR)/$(SRR_ID)_subsample.fastq > $(ALIGN_PREFIX)/$(SRR_ID).sam
@@ -119,7 +119,7 @@ align: index reads/$(SRR_ID)_subsample.fastq
 	@echo " Alignment complete: $(ALIGN_PREFIX)/$(SRR_ID).bam"
 
 
-.PHONY: all genome features accessions reads subsample index align clean
+.PHONY: all genome features accessions reads index align clean
 
 ```
 ### Run the makefile
