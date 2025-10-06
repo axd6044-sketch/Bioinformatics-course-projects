@@ -156,9 +156,9 @@ N = number of reads (expected 1500 subsampled reads, or 76,300,000 full reads)
 L = average read length (~75 bp for SRR3194430)
 G = genome length (~10,794 bp for Zika MR766)
 
-### What is the observed average coverage?
-X+ observed expected​=0.0027×530,000≈1,431× . So the expected average coverage for the mapped fraction is about 1,400×.
-How much does the coverage vary across the genome? (Provide a visual estimate
+### What is the expected average coverage?
+expected​=0.0027×530,000≈1,431× . So the expected average coverage for the mapped fraction is about 1,400×.
+
 ```
 samtools depth SRR3194430.bam | awk '{sum+=$3} END { print "Average coverage:", sum/NR }'
 ```
