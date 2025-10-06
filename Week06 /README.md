@@ -8,14 +8,16 @@ downloads the reference genome, indexes it, downloads raw reads from the NCBI SR
 ```
 micromamba activate bioinfo
 ```
+Prepare the makefile and run all 
+```
+make all
+```
 
 ## Stats 
 ```
-sam
+samtools flagstat SRR3194430.bam 
 ```
 
-```
-bwaenv) [axd6044@p-sc-2145 Week05]$ samtools flagstat SRR3194430.bam 
 76300000 + 0 in total (QC-passed reads + QC-failed reads)
 76299868 + 0 primary
 0 + 0 secondary
