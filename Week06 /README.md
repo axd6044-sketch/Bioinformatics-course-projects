@@ -14,8 +14,8 @@ Visualize the aligned reads in IGV.
 ```
 micromamba activate bioinfo
 ```
-Prepare the makefile and run all 
-The makefile is attached
+Prepare the makefile 
+The makefile is attached below
 ```
 
 SHELL = bash
@@ -122,6 +122,7 @@ align: index reads/$(SRR_ID)_subsample.fastq
 .PHONY: all genome features accessions reads subsample index align clean
 
 ```
+### Run the makefile
 ```
 make all
 ```
