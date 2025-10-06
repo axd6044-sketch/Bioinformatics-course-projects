@@ -14,10 +14,7 @@ nano zika_pipeline.sh
 ```
 ### Activation requirements before running the script
 ```
-module load anaconda 
-conda activate bioinfo
-conda install -c conda-forge jq
-conda install -c bioconda seqkit cutadapt fastqc ncbi-datasets-cli sra-tools
+micromamba activate bioinfo
 ```
 ### Content of the script is given below. 
 Paste this in the script 
