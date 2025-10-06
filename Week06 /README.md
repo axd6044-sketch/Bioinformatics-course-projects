@@ -151,12 +151,10 @@ samtools flagstat SRR3194430.bam
 
 ### What percentage of reads aligned to the genome?
 0.27% which is extremely less 
-###What was the expected average coverage?
+### What was the expected average coverage?
 N = number of reads (expected 1500 subsampled reads, or 76,300,000 full reads)
 L = average read length (~75 bp for SRR3194430)
 G = genome length (~10,794 bp for Zika MR766)
-
-### What is the expected average coverage?
 expected​=0.0027×530,000≈1,431× . So the expected average coverage for the mapped fraction is about 1,400×.
 
 ```
