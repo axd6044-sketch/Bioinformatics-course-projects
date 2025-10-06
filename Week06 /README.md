@@ -5,7 +5,6 @@
 Download the reference Zika genome (MR766 strain).
 Index the genome for alignment.
 Download raw reads from the NCBI SRA database.
-Subsample reads to achieve ~10× genome coverage.
 Align the reads to the genome using bwa mem.
 Compute mapping statistics and coverage using samtools.
 Visualize the aligned reads in IGV.
@@ -59,8 +58,8 @@ $(GENOME_FA) $(GFF):
 
 genome: $(GENOME_FA) $(GFF)
 	@echo ">> Computing genome size..."
-	@GENOME_SIZE=$$(grep -v ">" $(GENOME_FA) | tr -d '\n' | wc -c); \
-	echo "Genome size (bp): $$GENOME_SIZE"
+	@GENOME_SIZE=$$(grep -v ">" $(GENOME_FA) | tr -d '\n' | wc -c); 
+	@echo "Genome size (bp): $$GENOME_SIZE"
 
 # ---- 2. Count features in GFF ----
 features: $(GFF)
