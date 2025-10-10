@@ -1,4 +1,4 @@
-# This week’s goal was to automate the workflow for mapping sequence reads to the Zika virus genome using a Makefile, and to visualize the resulting alignments in IGV
+## This week’s goal was to automate the workflow for mapping sequence reads to the Zika virus genome using a Makefile, and to visualize the resulting alignments in IGV
 
 ## First:  Making a makefile 
 ### The Makefile performs the following steps automatically:
@@ -82,7 +82,7 @@ accessions:
 
 # ---- 4. Download sequencing reads ----
 $(READDIR)/$(SRR_ID).fastq:
-	echo ">> Prefetching $(SRR_ID)..."
+	echo ">> Getting $(SRR_ID)..."
 	prefetch $(SRR_ID)
 	mkdir -p $(READDIR)
 	fasterq-dump $(SRR_ID) -O $(READDIR)/
