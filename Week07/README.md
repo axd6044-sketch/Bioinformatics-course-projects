@@ -33,14 +33,17 @@ make align fastq=SRR3191544
 ```
 ### 5. bigwig
 ```
-make bigwig fastq=SRR3194430 genome_fa=ref/genome.fa
-make bigwigfastq=SRR3191544 genome_fa=ref/genome.fa
+make bigwigse fastq=SRR3194430 genome_fa=ref/genome.fa
+make bigwigpe fastq=SRR3191544 genome_fa=ref/genome.fa
 ```
 ## IGV visualization of bam files 
 
 ### First : Illumina NextSeq for single end dataset 
+<img src="Images/img2.png" alt="image" width="800">
 
 ### Second : Illumina MiSeq for paired end dataset
+<img src="Images/img3.png" alt="image" width="800">
+<img src="Images/img2.png" alt="image" width="800">
 
 ## Briefly describe the differences between the alignment in both files.
 
