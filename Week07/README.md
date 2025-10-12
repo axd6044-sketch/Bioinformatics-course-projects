@@ -42,8 +42,8 @@ make bigwigpe fastq=SRR3191544 genome_fa=ref/genome.fa
 <img src="Images/img1.png" alt="image" width="800">
 
 ### Second : Illumina MiSeq for paired end dataset
-<img src="Images/img2.png" alt="image" width="800">
 <img src="Images/img3.png" alt="image" width="800">
+<img src="Images/img2.png" alt="image" width="800">
 
 ## Briefly describe the differences between the alignment in both files.
 
