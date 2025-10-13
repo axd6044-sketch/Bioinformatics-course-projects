@@ -119,3 +119,24 @@ The position with the highest observed coverage was coordinate 6143 on the refer
 
 The position with the highest coverage was coordinate 3442 on NC_012532.1, with a maximum depth of 482×.
 ## Select a gene of interest. How many alignments on a forward strand cover the gene?
+
+First check what are the genes present 
+```
+grep -w "gene" ref/genome.gff | awk -F'\t' '{print $9}' | sed 's/;/\n/g' | grep -E '^gene=' | sed 's/gene=//' | sort -u
+Output : POLY
+```
+The entire genome (from position 107 to 10366) is annotated as one continuous ORF called POLY.
+
+To check alignments - 
+1. For Next Seq
+2. For MiSeq -
+```
+samtools view -c -F 3348 -q 10 alignments/SRR3194430_sorted.bam "NC_012532.1:107-10366"
+Output : 99,160 alignments
+samtools view -c -f 64 -F 3348 -q 10 alignments/SRR3191544_sorted.bam "NC_012532.1:107-10366"
+Output: 10,464 fragments
+```
+-F 3348 excludes unmapped, reverse-strand, secondary, supplementary, and duplicate records.
+-f 64 (MiSeq) counts each paired fragment once by selecting read1 only.
+-q 10 keeps MAPQ ≥ 10.
+
