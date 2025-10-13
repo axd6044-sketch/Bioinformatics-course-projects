@@ -36,6 +36,10 @@ make align fastq=SRR3191544
 make bigwigse fastq=SRR3194430 genome_fa=ref/genome.fa
 make bigwigpe fastq=SRR3191544 genome_fa=ref/genome.fa
 ```
+### all : get_genome	get_fastq get_pairedfastq index alignsingle alignpaired bigwigse bigwigpe
+```
+make all 
+```
 ## IGV visualization of bam files 
 
 ### First : Illumina NextSeq for single end dataset 
@@ -123,7 +127,14 @@ The position with the highest coverage was coordinate 3442 on NC_012532.1, with 
 First check what are the genes present 
 ```
 grep -w "gene" ref/genome.gff | awk -F'\t' '{print $9}' | sed 's/;/\n/g' | grep -E '^gene=' | sed 's/gene=//' | sort -u
+
 Output : POLY
+```
+Check Co-ordinates 
+```
+$ awk -F'\t' '$3=="CDS" { > split($9, a, ";"); > gene=""; product=""; > for (i in a) { > if (a[i] ~ /^gene=/) { gene = a[i]; sub("gene=", "", gene); } > if (a[i] ~ /^product=/) { product = a[i]; sub("product=", "", product); } > } > printf("%-12s %-30s %s:%s-%s\n", gene, product, $1, $4, $5); > }' ref/genome.gff | sort -u
+
+Output: POLY polyprotein NC_012532.1:107-10366
 ```
 The entire genome (from position 107 to 10366) is annotated as one continuous ORF called POLY.
 
