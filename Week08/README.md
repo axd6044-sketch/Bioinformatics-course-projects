@@ -10,7 +10,7 @@ mamba activate bioinfo
 ```
 
 ### First finding out what is the PRJNA number 
-PRJNA - 
+PRJNA313294
 
 ### The Genome file we need is of Zika Virus 
 This will be downloaded once in the beginning 
