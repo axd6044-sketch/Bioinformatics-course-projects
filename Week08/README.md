@@ -1,11 +1,20 @@
 ## Assignment for Week08 
+the assignment requirements:
+Makefile — produces multiple BAMs named by sample, plus FastQC and BigWig
+design.csv — connects SRR → sample name → layout (SINGLE/PAIRED)
+README.md — explains how to run the pipeline including GNU Parallel from design.csv
+
+## Requirements
+```
+mamba activate bioinfo
+```
 
 ### First finding out what is the PRJNA number 
 PRJNA - 
 
 ### The Genome file we need is of Zika Virus 
 This will be downloaded once in the beginning 
-GCF = 
+GCF = GCF_000882815.3 (Zika MR766)
 
 ### Creating the design file with all the samples metadata 
 The design.csv file contains all the SRR numbers and their meta data
@@ -103,3 +112,9 @@ parallel --jobs 2 --bar "
 "
 
 ```
+### Outputs per sample:
+FASTQ: reads/<sample>.fastq or reads/<sample>_R1.fastq, _R2.fastq
+FastQC: reads/fastqc_reports/*_fastqc.html
+BAM + BAI: alignments/<sample>.sorted.bam(.bai)
+BigWig: coverage/<sample>.bw
+Stats: stats/<sample>_flagstat.txt
