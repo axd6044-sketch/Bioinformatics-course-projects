@@ -1,7 +1,7 @@
 ## Assignment for Week08 
 the assignment requirements:
 Makefile — produces multiple BAMs named by sample, plus FastQC and BigWig
-design.csv — connects SRR → sample name → layout (SINGLE/PAIRED)
+design.csv — connects SRR - sample name - layout (SINGLE/PAIRED)
 README.md — explains how to run the pipeline including GNU Parallel from design.csv
 
 ## Requirements
