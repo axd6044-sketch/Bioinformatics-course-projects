@@ -34,7 +34,7 @@ help:
 	@echo "Usage:"
 	@echo "  make design PRJNA=PRJNA313294"
 	@echo "  make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika"
-	@echo "  make get_fastq srr=SRR3194430"
+	@echo "  make get_fastq srr=SRR3194430" "reads=reads fastqcreports=reads/fastqc_reports"
 	@echo "  make genome_index ref=ref/genome species=Zika"
 	@echo "  make alignreads genome_fa=ref/Zikagenome.fa reads=reads srr=SRR3191544 bam=bam"
 	@echo "  make bigwig srr=SRR3191544 bam=bam genome_fa=ref/Zikagenome.fa"
