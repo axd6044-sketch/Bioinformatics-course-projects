@@ -1,6 +1,5 @@
 ## Week09 RNA-Seq Analysis Pipeline
-
-This pipeline automates the processing of RNA-seq data using a Makefile and design.csv file. The pipeline handles both single-end and paired-end reads, producing aligned BAM files and visualization files.
+For this week's assignment, the previous makefile (provided in the repository) was improved and automation process was also rewritten. 
 
 ## Prerequisites
 
@@ -10,24 +9,31 @@ mamba activate bioinfo
 
 ## Pipeline Overview
 
-The pipeline uses the makefile to generate design.csv file and runs the code in parallel for multiple sra samples.
+This pipeline automates the processing of RNA-seq data using a Makefile and design.csv file. The pipeline handles both single-end and paired-end reads, producing aligned BAM files and visualization files.
 
 ## Running the Pipeline
-```bash
-### Initialize Reference Genome
+
+Initialize Reference Genome
 Download and index the reference genome (only needed once):
 
 ```bash
 make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika
 make genome_index genome_fa=ref/genome/Zikagenome.fa
+```
+## For processing single sample (single or paired-end), run:
 
 ```bash
+make get_fastq srr=<SRR_ID> reads=reads fastqcreports=reads/fastqc_reports
+make alignreads srr=<SRR_ID> genome_fa=ref/genome/Zikagenome.fa reads=reads bam=bam
+make bigwig srr=<SRR_ID> bam=bam genome_fa=ref/genome/Zikagenome.fa
+```
+## Parallel processing of multiple samples 
+To process all samples in parallel from design.csv, make sure GNU Parallel can create temporary files. On macOS the default temp dir sometimes isn't writable from conda environments — create a per-user tmpdir and pass it with `--tmpdir`.
+
+Generate the design file
+```
 make design
 ```
-
-### 1. Initialize Reference Genome
-Download and index the reference genome (only needed once):
-To process all samples in parallel from design.csv, make sure GNU Parallel can create temporary files. On macOS the default temp dir sometimes isn't writable from conda environments — create a per-user tmpdir and pass it with `--tmpdir`.
 
 ```bash
 # create a safe tmpdir (do this once per session)
@@ -49,14 +55,6 @@ awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
       'make bigwig srr={} bam=bam genome_fa=ref/genome/Zikagenome.fa'
 ```
-For each sample (single or paired-end), run:
-
-```bash
-make get_fastq srr=<SRR_ID>
-make alignreads srr=<SRR_ID> genome_fa=ref/genome/Zikagenome.fa reads=reads bam=bam
-make bigwig srr=<SRR_ID> bam=bam genome_fa=ref/genome/Zikagenome.fa
-```
-
 
 ## Output Files
 
