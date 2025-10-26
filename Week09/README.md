@@ -20,12 +20,20 @@ Download and index the reference genome (only needed once):
 make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika
 make genome_index genome_fa=ref/genome/Zikagenome.fa
 ```
+## For processing single sample (single or paired-end), run:
+
+```bash
+make get_fastq srr=<SRR_ID>
+make alignreads srr=<SRR_ID> genome_fa=ref/genome/Zikagenome.fa reads=reads bam=bam
+make bigwig srr=<SRR_ID> bam=bam genome_fa=ref/genome/Zikagenome.fa
+```
+## Parallel processing of multiple samples 
+To process all samples in parallel from design.csv, make sure GNU Parallel can create temporary files. On macOS the default temp dir sometimes isn't writable from conda environments — create a per-user tmpdir and pass it with `--tmpdir`.
+
 Generate the design file
 ```
 make design
 ```
-## Parallel processing of multiple samples 
-To process all samples in parallel from design.csv, make sure GNU Parallel can create temporary files. On macOS the default temp dir sometimes isn't writable from conda environments — create a per-user tmpdir and pass it with `--tmpdir`.
 
 ```bash
 # create a safe tmpdir (do this once per session)
@@ -47,14 +55,6 @@ awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
       'make bigwig srr={} bam=bam genome_fa=ref/genome/Zikagenome.fa'
 ```
-## For processing single sample (single or paired-end), run:
-
-```bash
-make get_fastq srr=<SRR_ID>
-make alignreads srr=<SRR_ID> genome_fa=ref/genome/Zikagenome.fa reads=reads bam=bam
-make bigwig srr=<SRR_ID> bam=bam genome_fa=ref/genome/Zikagenome.fa
-```
-
 
 ## Output Files
 
