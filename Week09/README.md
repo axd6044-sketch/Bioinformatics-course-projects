@@ -24,9 +24,7 @@ Generate the design file
 ```
 make design
 ```
-
-### 1. Initialize Reference Genome
-Download and index the reference genome (only needed once):
+## Parallel processing of multiple samples 
 To process all samples in parallel from design.csv, make sure GNU Parallel can create temporary files. On macOS the default temp dir sometimes isn't writable from conda environments — create a per-user tmpdir and pass it with `--tmpdir`.
 
 ```bash
@@ -49,7 +47,7 @@ awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
       'make bigwig srr={} bam=bam genome_fa=ref/genome/Zikagenome.fa'
 ```
-For each sample (single or paired-end), run:
+## For processing single sample (single or paired-end), run:
 
 ```bash
 make get_fastq srr=<SRR_ID>
