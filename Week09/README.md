@@ -13,15 +13,16 @@ mamba activate bioinfo
 The pipeline uses the makefile to generate design.csv file and runs the code in parallel for multiple sra samples.
 
 ## Running the Pipeline
-```bash
-### Initialize Reference Genome
+
+Initialize Reference Genome
 Download and index the reference genome (only needed once):
 
 ```bash
 make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika
 make genome_index genome_fa=ref/genome/Zikagenome.fa
-
-```bash
+```
+Generate the design file
+```
 make design
 ```
 
