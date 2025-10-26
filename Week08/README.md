@@ -1,7 +1,7 @@
 ## Assignment for Week08 
 the assignment requirements:
 Makefile — produces multiple BAMs named by sample, plus FastQC and BigWig
-design.csv — connects SRR - sample name - layout (SINGLE/PAIRED)
+design.csv — connects SRR → sample name → layout (SINGLE/PAIRED)
 README.md — explains how to run the pipeline including GNU Parallel from design.csv
 
 ## Requirements
@@ -73,9 +73,10 @@ For more details on how to run this makefile, Week07 README file can be referred
 
 We will now run the single end files and paired end files using data from design file and input those during running makefile - how to do that is shown below
 
-### Getting the genome which is common and has to be done once for all the samples 
+### Getting the genome and index it which is common and has to be done once for all the samples 
 ```
 make get_genome genome=GCF_000882815.3
+make index genome_fa=ref/genome.fa
 ```
 
 ### First dry run 
@@ -92,8 +93,6 @@ parallel --dry-run "
   make alignpaired fastq={};
   make bigwigpe fastq={} genome_fa=ref/genome.fa
 "
-
-
 ```
 ### Now real run 
 ```
