@@ -23,7 +23,7 @@ make genome_index genome_fa=ref/genome/Zikagenome.fa
 ## For processing single sample (single or paired-end), run:
 
 ```bash
-make get_fastq srr=<SRR_ID>
+make get_fastq srr=<SRR_ID> reads=reads fastqcreports=reads/fastqc_reports
 make alignreads srr=<SRR_ID> genome_fa=ref/genome/Zikagenome.fa reads=reads bam=bam
 make bigwig srr=<SRR_ID> bam=bam genome_fa=ref/genome/Zikagenome.fa
 ```
