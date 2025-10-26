@@ -10,7 +10,7 @@ mamba activate bioinfo
 
 ## Pipeline Overview
 
-The
+The pipeline uses the makefile to generate design.csv file and runs the code in parallel for multiple sra samples.
 
 ## Running the Pipeline
 ```bash
