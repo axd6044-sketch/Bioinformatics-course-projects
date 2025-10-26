@@ -1,6 +1,5 @@
 ## Week09 RNA-Seq Analysis Pipeline
-
-This pipeline automates the processing of RNA-seq data using a Makefile and design.csv file. The pipeline handles both single-end and paired-end reads, producing aligned BAM files and visualization files.
+For this week's assignment, the previous makefile (provided in the repository) was improved and automation process was also rewritten. 
 
 ## Prerequisites
 
@@ -10,7 +9,7 @@ mamba activate bioinfo
 
 ## Pipeline Overview
 
-The pipeline uses the makefile to generate design.csv file and runs the code in parallel for multiple sra samples.
+This pipeline automates the processing of RNA-seq data using a Makefile and design.csv file. The pipeline handles both single-end and paired-end reads, producing aligned BAM files and visualization files.
 
 ## Running the Pipeline
 
