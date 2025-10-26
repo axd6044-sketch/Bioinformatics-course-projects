@@ -1,8 +1,5 @@
-#This is a makefile for Wee07 assignment
-#The purpose of this makefile is : 
-
-
-#The outputs the makefile will produce:
+#This is a makefile for RNA-seq analysis
+#Process both single and paired-end reads using pattern-based rules
 
 SHELL = bash
 .ONESHELL:
@@ -11,94 +8,97 @@ SHELL = bash
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
+#variables
+ref ?= ref/genome
+species ?= Zika
+genome ?= GCF_000882815.3
+srr ?= SRR3194430
+reads ?= reads
+fastqcreports ?= $(reads)/fastqc_reports
+genome_fa ?= $(ref)/$(species)genome.fa
+bam ?= bam
+PRJNA ?= PRJNA313294
+
+
 # ------ No changes in code beyond this point -----
 
-
-all: get_genome	get_fastq get_pairedfastq index alignsingle alignpaired bigwigse bigwigpe
+all: design get_genome get_fastq genome_index alignreads bigwig
 	echo ">> All steps completed successfully."
 
-# Download reference genome
-# Usage: make get_genome genome=GCF_000882815.3
+# Display help information
+help:
+	@echo "Available targets:"
+	@echo "  design          - Generate design.csv from BioProject"
+	@echo "  get_genome        - Download reference genome"
+	@echo "  get_fastq        - Download and process FASTQ files (uses -X 100000 to limit data size)"
+	@echo "Usage:"
+	@echo "  make design PRJNA=PRJNA313294"
+	@echo "  make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika"
+	@echo "  make get_fastq srr=SRR3194430"
+	@echo "  make genome_index ref=ref/genome species=Zika"
+	@echo "  make alignreads genome_fa=ref/Zikagenome.fa reads=reads srr=SRR3191544 bam=bam"
+	@echo "  make bigwig srr=SRR3191544 bam=bam genome_fa=ref/Zikagenome.fa"
+
+
+# Generate design.csv from BioProject
+# Usage: make design PRJNA=PRJNA313294
+make design:
+	bio search -H --csv ${PRJNA} > design.csv
+	cat design.csv
+
+# Download reference genome - only keeps fa and gff files
+# Usage: make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika
 get_genome:
-	mkdir -p ref
+	mkdir -p ${dir ${ref}}
 	datasets download genome accession $(genome) --include genome,gff3 --filename ${genome}_genome.zip
-	unzip -n -o ${genome}_genome.zip -d ref
-	rm ${genome}_genome.zip
-	mv ref/ncbi_dataset/data/$(genome)/*.fna ref/genome.fa
-	mv ref/ncbi_dataset/data/$(genome)/*.gff ref/genome.gff
-	echo "Genome saved to ref/genome.fa | GFF saved to ref/genome.gff"
+	unzip -n -o ${genome}_genome.zip -d ${ref}
+	mv ${ref}/ncbi_dataset/data/$(genome)/*.fna ${ref}/${species}genome.fa
+	mv ${ref}/ncbi_dataset/data/$(genome)/*.gff ${ref}/${species}genome.gff
+	rm -rf ${genome}_genome.zip ${ref}/ncbi_dataset ${ref}/README.md ${ref}/md5sum.txt
+	echo "Genome saved to ${ref}/${species}genome.fa | GFF saved to ${ref}/${species}genome.gff"
 
-# Download FULL FASTQ 
-# Usage: make get_fastq fastq=SRR3194430
+# Download and process FASTQ files (handles both single and paired-end)
+# Usage: make get_fastq srr=SRR3194430 reads=reads fastqcreports=reads/fastqc_reports
 get_fastq:
-	mkdir -p reads
-	fasterq-dump $(fastq) -O reads/
-	seqkit stats reads/$(fastq).fastq > reads/$(fastq)_stats.txt
-	@echo ">> Running FastQC..."
-	mkdir -p reads/fastqc_reports
-	fastqc -o reads reads/$(fastq).fastq
-	echo "FASTQ downloaded + QC run"
-
-# Download PAIRED FASTQ
-# Usage: make get_pairedfastq fastq=SRR3191544
-get_pairedfastq:
-	mkdir -p reads
-	fasterq-dump --split-files $(fastq) -O reads/
-	seqkit stats reads/$(fastq)_1.fastq reads/$(fastq)_2.fastq > reads/$(fastq)_stats.txt
-	@echo ">> Running FastQC..."
-	mkdir -p reads/fastqc_reports
-	fastqc -o reads/fastqc_reports reads/$(fastq)_1.fastq reads/$(fastq)_2.fastq
-	echo "Paired FASTQ downloaded + QC run"
+	mkdir -p $(reads)
+	mkdir -p $(fastqcreports)
+	fastq-dump --split-3 --gzip -X 100000 $(srr) -O $(reads)/
+	gunzip $(reads)/*.fastq.gz || true
+	# fastqc and seqkit will operate on all FASTQ files in the reads directory
+	fastqc -o $(fastqcreports) $(reads)/*.fastq
+	seqkit stats $(reads)/*.fastq > $(reads)/all_stats.txt
+	ls -l $(reads)
 
 # Index genome for BWA and samtools
-# Usage: make index genome_fa=ref/genome.fa
-index:
-	@echo ">> Indexing genome with BWA..."
-	bwa index -p ref/genome_index $(genome_fa)
-	@echo " Genome indexing complete."
+# Usage: make genome_index genome_fa=ref/Zikagenome.fa
+genome_index:
+	bwa index -a is -p $(basename $(genome_fa)) $(genome_fa)
+	samtools faidx $(genome_fa)
 
-# Align FULL FASTQ to genome
-# Usage: make alignsingle fastq=SRR3194430
 
-alignsingle:
-	@echo ">> Aligning reads to genome..."
-	mkdir -p alignments
-	bwa mem ref/genome_index reads/$(fastq).fastq | samtools sort -o alignments/$(fastq)_sorted.bam
-	samtools index alignments/$(fastq)_sorted.bam
-	samtools flagstat alignments/$(fastq)_sorted.bam > alignments/$(fastq)_align_stats.txt
-	echo "BAM + index + stats ready in alignments/"
-
-# Usage: make alignpaired fastq=SRR3191544
-alignpaired:
-	@echo ">> Aligning reads to genome..."
-	mkdir -p alignments
-	bwa mem ref/genome_index reads/$(fastq)_1.fastq reads/$(fastq)_2.fastq | samtools sort -o alignments/$(fastq)_sorted.bam
-	samtools index alignments/$(fastq)_sorted.bam
-	samtools flagstat alignments/$(fastq)_sorted.bam > alignments/$(fastq)_align_stats.txt
-	echo "BAM + index + stats ready in alignments/"
+# Align reads to genome (works for single- or paired-end FASTQ)
+# rely on make's wildcard expansion to collect either one (single-end)
+# or two (paired-end) FASTQ files. Ordering is lexicographic so _1 before _2.
+# Usage: make alignreads genome_fa=ref/Zikagenome.fa reads=reads srr=SRR3191544 bam=bam
+alignreads:
+	mkdir -p $(bam)
+	FASTQS=$(wildcard $(reads)/$(srr)*.fastq*)
+	bwa mem -t 4 $(basename $(genome_fa)) $${FASTQS} | samtools sort -o $(bam)/$(srr).bam
+	samtools index $(bam)/$(srr).bam
+	samtools flagstat $(bam)/$(srr).bam > $(bam)/$(srr)_align_stats.txt
 
 
 # Convert BAM to BedGraph + BigWig for IGV/Genome Browser
-# Usage: make bigwigse fastq=SRR3194430 genome_fa=ref/genome.fa
-
-bigwigse:
-	# Ensure fai index exists
-	test -f $(genome_fa).fai || samtools faidx $(genome_fa)
-	echo ">> Generating BedGraph..."
-	bedtools genomecov -ibam alignments/$(fastq)_sorted.bam -bg | sort -k1,1 -k2,2n > alignments/$(fastq).bedgraph
-	echo ">> Converting to BigWig..."
-	bedGraphToBigWig alignments/$(fastq).bedgraph $(genome_fa).fai alignments/$(fastq).bw
-	echo "BigWig generated: alignments/$(fastq).bw | Load into IGV!"
-
-# Usage: make bigwigpe fastq=SRR3191544 genome_fa=ref/genome.fa
-bigwigpe:
-	# Ensure fai index exists
-	test -f $(genome_fa).fai || samtools faidx $(genome_fa)
-	echo ">> Generating BedGraph..."
-	bedtools genomecov -ibam alignments/$(fastq)_sorted.bam -bg | sort -k1,1 -k2,2n > alignments/$(fastq).bedgraph
-	echo ">> Converting to BigWig..."
-	bedGraphToBigWig alignments/$(fastq).bedgraph $(genome_fa).fai alignments/$(fastq).bw
-	echo "BigWig generated: alignments/$(fastq).bw | Load into IGV!"
+# Usage: make bigwig srr=SRR3191544 bam=bam genome_fa=ref/Zikagenome.fa
+bigwig:
+	bedtools genomecov -ibam $(bam)/$(srr).bam -bg > $(bam)/$(srr).bedgraph
+	sort -k1,1 -k2,2n $(bam)/$(srr).bedgraph -o $(bam)/$(srr)_sorted.bedgraph
+	awk '{print $$1, $$2, $$3, $$4}' OFS='\t' $(bam)/$(srr)_sorted.bedgraph > $(bam)/$(srr)_final.bedgraph
+	cut -f1,2 $(genome_fa).fai > $(bam)/genome.chrom.sizes
+	grep -Fwf <(cut -f1 $(bam)/genome.chrom.sizes) $(bam)/$(srr)_final.bedgraph > $(bam)/$(srr)_filtered.bedgraph
+	bedGraphToBigWig $(bam)/$(srr)_filtered.bedgraph $(bam)/genome.chrom.sizes $(bam)/$(srr).bw
+	bgzip -f $(bam)/$(srr)_filtered.bedgraph
+	tabix -p bed $(bam)/$(srr)_filtered.bedgraph.gz
 
 
-.PHONY: get_genome get_fastq get_pairedfastq index alignsingle alignpaired bigwigse bigwigpe all
+.PHONY: help design get_genome get_fastq genome_index alignreads bigwig all
