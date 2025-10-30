@@ -11,7 +11,7 @@ MAKEFLAGS += --no-builtin-rules
 #variables
 ref ?= ref/genome
 species ?= Zika
-genome ?= GCF_000882815.3
+genome ?= GCF_000882815.3 / GCA_000882815.1
 srr ?= SRR3194430
 reads ?= reads
 fastqcreports ?= $(reads)/fastqc_reports
@@ -22,7 +22,7 @@ PRJNA ?= PRJNA313294
 
 # ------ No changes in code beyond this point -----
 
-all: design get_genome get_fastq genome_index alignreads bigwig
+all: design get_genome get_fastq genome_index alignreads bigwig 
 	echo ">> All steps completed successfully."
 
 # Display help information
@@ -34,7 +34,7 @@ help:
 	@echo "Usage:"
 	@echo "  make design PRJNA=PRJNA313294"
 	@echo "  make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika"
-	@echo "  make get_fastq srr=SRR3194430" "reads=reads fastqcreports=reads/fastqc_reports"
+	@echo "  make get_fastq srr=SRR3194430"
 	@echo "  make genome_index ref=ref/genome species=Zika"
 	@echo "  make alignreads genome_fa=ref/Zikagenome.fa reads=reads srr=SRR3191544 bam=bam"
 	@echo "  make bigwig srr=SRR3191544 bam=bam genome_fa=ref/Zikagenome.fa"
@@ -46,16 +46,15 @@ make design:
 	bio search -H --csv ${PRJNA} > design.csv
 	cat design.csv
 
-# Download reference genome - only keeps fa and gff files
-# Usage: make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika
+# Download reference genome for human analysis (chromosome 22 subset)
+# Usage: make get_genome ref=ref/hg38 genome=chr22 species=human
 get_genome:
-	mkdir -p ${dir ${ref}}
-	datasets download genome accession $(genome) --include genome,gff3 --filename ${genome}_genome.zip
-	unzip -n -o ${genome}_genome.zip -d ${ref}
-	mv ${ref}/ncbi_dataset/data/$(genome)/*.fna ${ref}/${species}genome.fa
-	mv ${ref}/ncbi_dataset/data/$(genome)/*.gff ${ref}/${species}genome.gff
-	rm -rf ${genome}_genome.zip ${ref}/ncbi_dataset ${ref}/README.md ${ref}/md5sum.txt
-	echo "Genome saved to ${ref}/${species}genome.fa | GFF saved to ${ref}/${species}genome.gff"
+	@echo ">> Downloading human reference genome (chr22, hg38 build)..."
+	mkdir -p $(ref)
+	curl -L -o $(ref)/$(genome).fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/$(genome).fa.gz
+	gunzip -f $(ref)/$(genome).fa.gz
+	mv $(ref)/$(genome).fa $(ref)/hmanchr22.fa
+	samtools faidx $(ref)/hmanchr22.fa
 
 # Download and process FASTQ files (handles both single and paired-end)
 # Usage: make get_fastq srr=SRR3194430 reads=reads fastqcreports=reads/fastqc_reports
@@ -70,35 +69,47 @@ get_fastq:
 	ls -l $(reads)
 
 # Index genome for BWA and samtools
-# Usage: make genome_index genome_fa=ref/Zikagenome.fa
+# Usage: make genome_index genome_fa=ref/hmanchr22.fa
+#bwa index -a is -p $(basename $(genome_fa)) $(genome_fa)
+#samtools faidx $(genome_fa)
 genome_index:
-	bwa index -a is -p $(basename $(genome_fa)) $(genome_fa)
-	samtools faidx $(genome_fa)
-
+	# build HISAT2 index (spliced aligner)
+	hisat2-build $(genome_fa) $(basename $(genome_fa))
 
 # Align reads to genome (works for single- or paired-end FASTQ)
-# rely on make's wildcard expansion to collect either one (single-end)
-# or two (paired-end) FASTQ files. Ordering is lexicographic so _1 before _2.
-# Usage: make alignreads genome_fa=ref/Zikagenome.fa reads=reads srr=SRR3191544 bam=bam
+# Usage: make alignreads genome_fa=ref/hmanchr22 reads=reads srr=SRR3191544 bam=bam
 alignreads:
+	@echo ">> Aligning $(srr) using HISAT2 index $(genome_fa)"
 	mkdir -p $(bam)
-	FASTQS=$(wildcard $(reads)/$(srr)*.fastq*)
-	bwa mem -t 4 $(basename $(genome_fa)) $${FASTQS} | samtools sort -o $(bam)/$(srr).bam
-	samtools index $(bam)/$(srr).bam
-	samtools flagstat $(bam)/$(srr).bam > $(bam)/$(srr)_align_stats.txt
+	FASTQS=($(wildcard $(reads)/$(srr)*.fastq*))
+	@if [ $${#FASTQS[@]} -eq 2 ]; then \
+		echo ">> Detected paired-end reads: $${FASTQS[@]}"; \
+		hisat2 -p 4 -x "$(genome_fa)" -1 "$${FASTQS[0]}" -2 "$${FASTQS[1]}" | samtools sort -o "$(bam)/$(srr).bam"; \
+	elif [ $${#FASTQS[@]} -eq 1 ]; then \
+		echo ">> Detected single-end reads: $${FASTQS[0]}"; \
+		hisat2 -p 4 -x "$(genome_fa)" -U "$${FASTQS[0]}" | samtools sort -o "$(bam)/$(srr).bam"; \
+	else \
+		echo "!! ERROR: No FASTQ files found for $(srr) in $(reads)"; \
+		exit 1; \
+	fi
+	samtools index "$(bam)/$(srr).bam"
+	samtools flagstat "$(bam)/$(srr).bam" > "$(bam)/$(srr)_align_stats.txt"
+	@echo ">> Alignment complete: $(bam)/$(srr).bam"
 
 
 # Convert BAM to BedGraph + BigWig for IGV/Genome Browser
-# Usage: make bigwig srr=SRR3191544 bam=bam genome_fa=ref/Zikagenome.fa
+# Works for RNA-seq (spliced alignments) or genomic reads
+# Usage: make bigwig srr=SRR3191544 bam=bam genome_fa=ref/hmanchr22
 bigwig:
-	bedtools genomecov -ibam $(bam)/$(srr).bam -bg > $(bam)/$(srr).bedgraph
-	sort -k1,1 -k2,2n $(bam)/$(srr).bedgraph -o $(bam)/$(srr)_sorted.bedgraph
-	awk '{print $$1, $$2, $$3, $$4}' OFS='\t' $(bam)/$(srr)_sorted.bedgraph > $(bam)/$(srr)_final.bedgraph
-	cut -f1,2 $(genome_fa).fai > $(bam)/genome.chrom.sizes
-	grep -Fwf <(cut -f1 $(bam)/genome.chrom.sizes) $(bam)/$(srr)_final.bedgraph > $(bam)/$(srr)_filtered.bedgraph
-	bedGraphToBigWig $(bam)/$(srr)_filtered.bedgraph $(bam)/genome.chrom.sizes $(bam)/$(srr).bw
-	bgzip -f $(bam)/$(srr)_filtered.bedgraph
-	tabix -p bed $(bam)/$(srr)_filtered.bedgraph.gz
+	mkdir -p $(bam)
+	bedtools genomecov -ibam "$(bam)/$(srr).bam" -bg -split | awk '$$3>$$2' > "$(bam)/$(srr)_raw.bedgraph"
+	sort -k1,1 -k2,2n "$(bam)/$(srr)_raw.bedgraph" -o "$(bam)/$(srr)_sorted.bedgraph"
+	cut -f1,2 "$(genome_fa).fai" > "$(bam)/genome.chrom.sizes"
+	awk 'NR==FNR {a[$$1]; next} $$1 in a' "$(bam)/genome.chrom.sizes" "$(bam)/$(srr)_sorted.bedgraph" > "$(bam)/$(srr)_filtered.bedgraph"
+	bedGraphToBigWig "$(bam)/$(srr)_filtered.bedgraph" "$(bam)/genome.chrom.sizes" "$(bam)/$(srr).bw"
+	bgzip -f "$(bam)/$(srr)_filtered.bedgraph"
+	tabix -p bed "$(bam)/$(srr)_filtered.bedgraph.gz"
+
 
 
 .PHONY: help design get_genome get_fastq genome_index alignreads bigwig all

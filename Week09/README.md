@@ -17,15 +17,15 @@ Initialize Reference Genome
 Download and index the reference genome (only needed once):
 
 ```bash
-make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika
-make genome_index genome_fa=ref/genome/Zikagenome.fa
+make get_genome ref=ref/hg38 genome=chr22 species=human
+make genome_index genome_fa=ref/hmanchr22.fa
 ```
 ## For processing single sample (single or paired-end), run:
 
 ```bash
 make get_fastq srr=<SRR_ID> reads=reads fastqcreports=reads/fastqc_reports
-make alignreads srr=<SRR_ID> genome_fa=ref/genome/Zikagenome.fa reads=reads bam=bam
-make bigwig srr=<SRR_ID> bam=bam genome_fa=ref/genome/Zikagenome.fa
+make alignreads genome_fa=ref/hmanchr22 reads=reads srr=SRR3191544 bam=bam
+make bigwig srr=SRR3191544 bam=bam genome_fa=ref/hmanchr22
 ```
 ## Parallel processing of multiple samples 
 To process all samples in parallel from design.csv, make sure GNU Parallel can create temporary files. On macOS the default temp dir sometimes isn't writable from conda environments — create a per-user tmpdir and pass it with `--tmpdir`.
@@ -34,26 +34,26 @@ Generate the design file
 ```
 make design
 ```
-
-```bash
-# create a safe tmpdir (do this once per session)
+ 
+```
+# Create a safe tmpdir (do this once per session)
 mkdir -p ~/parallel_tmp
 chmod 700 ~/parallel_tmp
 
-# Download FASTQ for all samples
-awk -F',' 'NR>1 {print $1}' design.csv \
-  | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar 'make get_fastq srr={}'
-
-
-# Align all samples
+# Download FASTQ files for all human samples
 awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
-      'make alignreads srr={} genome_fa=ref/genome/Zikagenome.fa reads=reads bam=bam'
+      'make get_fastq srr={} reads=reads fastqcreports=reads/fastqc_reports'
 
-# Generate BigWig for all samples
+# Align all samples to human chr22 (hg38 build)
 awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
-      'make bigwig srr={} bam=bam genome_fa=ref/genome/Zikagenome.fa'
+      'make alignreads srr={} genome_fa=ref/hmanchr22 reads=reads bam=bam'
+
+# Generate BigWig files for visualization
+awk -F',' 'NR>1 {print $1}' design.csv \
+  | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
+      'make bigwig srr={} bam=bam genome_fa=ref/hmanchr22.fa'
 ```
 
 ## Output Files
