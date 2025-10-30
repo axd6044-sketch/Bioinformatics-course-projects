@@ -74,6 +74,8 @@ For each processed sample, the pipeline generates:
 
 ### Screenshot from IGV visualizing three SRR bam files and their bw files
 <img src="img1.png" alt="image" width="800">
+<img src="img2.png" alt="image" width="800">
+
 
 **Note:**
 - The Makefile automatically handles both single-end and paired-end data.
