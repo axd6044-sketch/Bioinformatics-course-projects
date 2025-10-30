@@ -72,6 +72,9 @@ For each processed sample, the pipeline generates:
 
 ---
 
+#Screenshot from IGV visualizing three SRR bam files and their bw files
+<img src="Images/img1.png" alt="image" width="800">
+
 **Note:**
 - The Makefile automatically handles both single-end and paired-end data.
 - Adjust the number of jobs in GNU Parallel as needed for your system.
