@@ -33,11 +33,11 @@ help:
 	@echo "  get_fastq        - Download and process FASTQ files (uses -X 100000 to limit data size)"
 	@echo "Usage:"
 	@echo "  make design PRJNA=PRJNA313294"
-	@echo "  make get_genome genome=GCF_000882815.3 ref=ref/genome species=Zika"
-	@echo "  make get_fastq srr=SRR3194430"
-	@echo "  make genome_index ref=ref/genome species=Zika"
-	@echo "  make alignreads genome_fa=ref/Zikagenome.fa reads=reads srr=SRR3191544 bam=bam"
-	@echo "  make bigwig srr=SRR3191544 bam=bam genome_fa=ref/Zikagenome.fa"
+	@echo "  make get_genome ref=ref genome=chr22 species=human"
+	@echo "  make get_fastq srr=SRR3194430 reads=reads fastqcreports=reads/fastqc_reports"
+	@echo "  make genome_index genome_fa=ref/hmanchr22.fa"
+	@echo "  make alignreads genome_fa=ref/hmanchr22 reads=reads srr=SRR3194430 bam=bam"
+	@echo "  make bigwig srr=SRR3194430 bam=bam genome_fa=ref/hmanchr22"
 
 
 # Generate design.csv from BioProject
@@ -47,7 +47,7 @@ make design:
 	cat design.csv
 
 # Download reference genome for human analysis (chromosome 22 subset)
-# Usage: make get_genome ref=ref/hg38 genome=chr22 species=human
+# Usage: make get_genome ref=ref genome=chr22 species=human
 get_genome:
 	@echo ">> Downloading human reference genome (chr22, hg38 build)..."
 	mkdir -p $(ref)
@@ -65,7 +65,7 @@ get_fastq:
 	gunzip $(reads)/*.fastq.gz || true
 	# fastqc and seqkit will operate on all FASTQ files in the reads directory
 	fastqc -o $(fastqcreports) $(reads)/*.fastq
-	seqkit stats $(reads)/*.fastq > $(reads)/all_stats.txt
+	seqkit stats $(reads)/*.fastq > $(reads)/${srr}_all_stats.txt
 	ls -l $(reads)
 
 # Index genome for BWA and samtools
@@ -77,7 +77,7 @@ genome_index:
 	hisat2-build $(genome_fa) $(basename $(genome_fa))
 
 # Align reads to genome (works for single- or paired-end FASTQ)
-# Usage: make alignreads genome_fa=ref/hmanchr22 reads=reads srr=SRR3191544 bam=bam
+# Usage: make alignreads genome_fa=ref/hmanchr22 reads=reads srr=SRR3194430 bam=bam
 alignreads:
 	@echo ">> Aligning $(srr) using HISAT2 index $(genome_fa)"
 	mkdir -p $(bam)
@@ -99,7 +99,7 @@ alignreads:
 
 # Convert BAM to BedGraph + BigWig for IGV/Genome Browser
 # Works for RNA-seq (spliced alignments) or genomic reads
-# Usage: make bigwig srr=SRR3191544 bam=bam genome_fa=ref/hmanchr22
+# Usage: make bigwig srr=SRR3194430 bam=bam genome_fa=ref/hmanchr22.fa
 bigwig:
 	mkdir -p $(bam)
 	bedtools genomecov -ibam "$(bam)/$(srr).bam" -bg -split | awk '$$3>$$2' > "$(bam)/$(srr)_raw.bedgraph"
