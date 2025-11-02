@@ -47,10 +47,10 @@ make design:
 	cat design.csv
 
 # Download reference genome for human analysis (chromosome 22 subset)
-# Usage: make get_genome ref=ref genome=chr22 species=human
+# Usage: make get_genome REF=ref genome=chr22 species=human
 get_genome:
 	@echo ">> Downloading human reference genome (chr22, hg38 build)..."
-	mkdir -p $(ref)
+	mkdir -p $(REF)
 	curl -L -o $(ref)/$(genome).fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/$(genome).fa.gz
 	gunzip -f $(ref)/$(genome).fa.gz
 	mv $(ref)/$(genome).fa $(ref)/hmanchr22.fa
@@ -69,25 +69,25 @@ get_fastq:
 	ls -l $(reads)
 
 # Index genome for BWA and samtools
-# Usage: make genome_index genome_fa=ref/hmanchr22.fa
-#bwa index -a is -p $(basename $(genome_fa)) $(genome_fa)
-#samtools faidx $(genome_fa)
+# Usage: make genome_index REF=ref/hmanchr22.fa
+#bwa index -a is -p $(basename $(REF)) $(REF)
+#samtools faidx $(REF)
 genome_index:
 	# build HISAT2 index (spliced aligner)
-	hisat2-build $(genome_fa) $(basename $(genome_fa))
+	hisat2-build $(REF) $(basename $(REF))
 
 # Align reads to genome (works for single- or paired-end FASTQ)
-# Usage: make alignreads genome_fa=ref/hmanchr22 reads=reads srr=SRR3194430 bam=bam
+# Usage: make alignreads REF=ref/hmanchr22 reads=reads srr=SRR3194430 bam=bam
 alignreads:
-	@echo ">> Aligning $(srr) using HISAT2 index $(genome_fa)"
+	@echo ">> Aligning $(srr) using HISAT2 index $(REF)"
 	mkdir -p $(bam)
 	FASTQS=($(wildcard $(reads)/$(srr)*.fastq*))
 	@if [ $${#FASTQS[@]} -eq 2 ]; then \
 		echo ">> Detected paired-end reads: $${FASTQS[@]}"; \
-		hisat2 -p 4 -x "$(genome_fa)" -1 "$${FASTQS[0]}" -2 "$${FASTQS[1]}" | samtools sort -o "$(bam)/$(srr).bam"; \
+		hisat2 -p 4 -x "$(REF)" -1 "$${FASTQS[0]}" -2 "$${FASTQS[1]}" | samtools sort -o "$(bam)/$(srr).bam"; \
 	elif [ $${#FASTQS[@]} -eq 1 ]; then \
 		echo ">> Detected single-end reads: $${FASTQS[0]}"; \
-		hisat2 -p 4 -x "$(genome_fa)" -U "$${FASTQS[0]}" | samtools sort -o "$(bam)/$(srr).bam"; \
+		hisat2 -p 4 -x "$(REF)" -U "$${FASTQS[0]}" | samtools sort -o "$(bam)/$(srr).bam"; \
 	else \
 		echo "!! ERROR: No FASTQ files found for $(srr) in $(reads)"; \
 		exit 1; \
@@ -99,12 +99,12 @@ alignreads:
 
 # Convert BAM to BedGraph + BigWig for IGV/Genome Browser
 # Works for RNA-seq (spliced alignments) or genomic reads
-# Usage: make bigwig srr=SRR3194430 bam=bam genome_fa=ref/hmanchr22.fa
+# Usage: make bigwig srr=SRR3194430 bam=bam REF=ref/hmanchr22.fa
 bigwig:
 	mkdir -p $(bam)
 	bedtools genomecov -ibam "$(bam)/$(srr).bam" -bg -split | awk '$$3>$$2' > "$(bam)/$(srr)_raw.bedgraph"
 	sort -k1,1 -k2,2n "$(bam)/$(srr)_raw.bedgraph" -o "$(bam)/$(srr)_sorted.bedgraph"
-	cut -f1,2 "$(genome_fa).fai" > "$(bam)/genome.chrom.sizes"
+	cut -f1,2 "$(REF).fai" > "$(bam)/genome.chrom.sizes"
 	awk 'NR==FNR {a[$$1]; next} $$1 in a' "$(bam)/genome.chrom.sizes" "$(bam)/$(srr)_sorted.bedgraph" > "$(bam)/$(srr)_filtered.bedgraph"
 	bedGraphToBigWig "$(bam)/$(srr)_filtered.bedgraph" "$(bam)/genome.chrom.sizes" "$(bam)/$(srr).bw"
 	bgzip -f "$(bam)/$(srr)_filtered.bedgraph"
