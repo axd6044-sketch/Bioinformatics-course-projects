@@ -1,12 +1,6 @@
 #This is a makefile for RNA-seq analysis
 #Process both single and paired-end reads using pattern-based rules
-#In this assignment, you will extend your previous alignment pipeline to include variant calling. 
-#Extend your existing Makefile to call variants on a single sample of your choice.
-
-#Use your existing BAM file as input
-#Generate a VCF file for this sample
-#Follow best practices for variant calling
-#Visualize the resulting VCF file data alongside the BAM file
+#call variants on a single sample of choice.
 
 SHELL = bash
 .ONESHELL:
@@ -22,9 +16,10 @@ genome ?= GCF_000882815.3 / GCA_000882815.1
 srr ?= SRR3191545
 READS=reads
 fastqcreports ?= $(reads)/fastqc_reports
-genome_fa ?= $(ref)/$(species)genome.fa
 bam ?= bam
 PRJNA ?= PRJNA313294
+vcf ?= vcf
+
 
 
 # ------ No changes in code beyond this point -----
