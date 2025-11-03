@@ -35,18 +35,23 @@ all: design get_genome get_fastq genome_index alignreads bigwig call_variants
 # Display help information
 help:
 	@echo "Available targets:"
-	@echo "  design      - Generate design.csv from BioProject"
-	@echo "  get_genome  - Download reference genome"
-	@echo "  get_fastq   - Download and process FASTQ files (uses -X 100000 to limit data size)"
-
+	@echo "  design        - Generate design.csv from BioProject"
+	@echo "  get_genome    - Download reference genome"
+	@echo "  get_fastq     - Download and process FASTQ files (uses -X 100000 to limit data size)"
+	@echo "  genome_index  - Build genome index (supports human or Zika)"
+	@echo "  alignreads    - Align reads to genome using BWA (supports single- or paired-end)"
+	@echo "  bigwig        - Convert BAM to BedGraph + BigWig for IGV/Genome Browser"
+	@echo "  call_variants - Call variants using bcftools"
+	@echo ""
 	@echo "Usage:"
 	@echo "  make design PRJNA=PRJNA313294"
-	@echo "  make get_genome REF=ref genome=chr22 species=human"
-	@echo "  make get_fastq srr=SRR3191545 reads=reads fastqcreports=reads/fastqc_reports"
-	@echo "  make genome_index genome_fa=ref/hmanchr22.fa"
-	@echo "  make alignreads genome_fa=ref/hmanchr22 reads=reads srr=SRR3191545 bam=bam"
-	@echo "  make bigwig srr=SRR3191545 bam=bam genome_fa=ref/hmanchr22"
-	@echo "  make call_variants species=human REF=ref/human_hg38.fa bam=bam srr=SRR3191545 vcf=vcf"
+	@echo "  make get_genome species=human GCF=GCF_009914755.1 REF=ref ACC=NC_060948.1"
+	@echo "  make get_fastq srr=SRR3191545 READS=reads fastqcreports=reads/fastqc_reports"
+	@echo "  make genome_index species=human REF=ref/human_genome.fa"
+	@echo "  make alignreads species=human REF=ref/human_genome.fa READS=reads srr=SRR3191545 bam=bam"
+	@echo "  make bigwig species=human srr=SRR3191545 bam=bam REF=ref/human_genome.fa"
+	@echo "  make call_variants species=human REF=ref/human_genome.fa bam=bam srr=SRR3191545 vcf=vcf"
+
 
 
 # Generate design.csv from BioProject
@@ -58,7 +63,7 @@ make design:
 # Download reference genome
 # Usage:
 #   make get_genome species=human  GCF=GCF_000882815.3 REF=ref ACC=NC_060948.1
-#   make get_genome species=zika GCF=GCF_009914755.1 REF=ref ACC=NC_001477.1
+#   make get_genome species=zika GCF=GCF_000882815.3 REF=ref ACC=NC_012532.1
 
 get_genome:
 	mkdir -p $(dir ${REF})
