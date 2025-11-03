@@ -105,6 +105,7 @@ Load these in IGV:
 <img src="img1.png" alt="image" width="800">
 #Screenshot of merged vcf file 
 <img src="img2.png" alt="image" width="800">
+<img src="img3.png" alt="image" width="800">
 
 **Note:**
 - The Makefile automatically handles both single-end and paired-end data.
