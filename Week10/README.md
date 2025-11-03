@@ -80,8 +80,8 @@ awk -F',' 'NR>1 {print $1}' design.csv \
       'make bigwig species=human srr={} bam=bam REF=ref/human_genome.fa'
 
 # Call variants for each sample
-awk -F',' 'NR>1 {print $$1}' design.csv | while read srr; do
-    make call_variants species=human REF=ref/human_genome.fa bam=bam srr=$$srr vcf=vcf
+awk -F',' 'NR>1 {print $1}' design.csv | while read srr; do
+    make call_variants species=human REF=ref/human_genome.fa bam=bam srr=$srr vcf=vcf
 done
 
 # Merge all individual VCFs into one multi-sample VCF
@@ -103,6 +103,8 @@ Load these in IGV:
 
 #Screenshot of single vcf file
 <img src="img1.png" alt="image" width="800">
+#Screenshot of merged vcf file 
+<img src="img2.png" alt="image" width="800">
 
 **Note:**
 - The Makefile automatically handles both single-end and paired-end data.
