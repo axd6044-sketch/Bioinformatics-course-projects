@@ -72,7 +72,7 @@ awk -F',' 'NR>1 {print $1}' design.csv \
 # Align all samples (human)
 awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
-      'make alignreads species=human REF=ref/human_genome READS=reads srr={} bam=bam'
+      'make alignreads species=human REF=ref/human_genome.fa READS=reads srr={} bam=bam'
 
 # Generate BigWig files for visualization
 awk -F',' 'NR>1 {print $1}' design.csv \

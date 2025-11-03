@@ -81,17 +81,17 @@ get_fastq:
 	mkdir -p ${fastqcreports}
 
 	@echo ">> Fetching first 100,000 reads for test..."
-	fastq-dump --split-3 --gzip -X 100000 ${srr} -O ${READS}/
-	gunzip ${READS}/*.fastq.gz || true
+	fastq-dump --split-files --gzip -X 100000 ${srr} -O ${READS}/
 
 	@echo ">> Running FastQC..."
-	fastqc -o ${fastqcreports} ${READS}/*.fastq
+	fastqc -o ${fastqcreports} ${READS}/*.fastq.gz
 
 	@echo ">> Generating read statistics..."
-	seqkit stats ${READS}/*.fastq > ${READS}/${srr}_all_stats.txt
+	seqkit stats ${READS}/*.fastq.gz > ${READS}/${srr}_all_stats.txt
 	cat ${READS}/${srr}_all_stats.txt
 
 	@echo ">> Done! FASTQ and QC files saved under ${READS}/"
+
 
 # Build genome index (supports human or Zika)
 # Usage:
@@ -120,27 +120,24 @@ endif
 #   make alignreads species=zika  REF=ref/zika_genome.fa  READS=reads srr=SRR3191545 bam=bam
 
 alignreads:
-	mkdir -p ${bam}
-	@echo ">> Aligning ${srr} for ${species} using BWA reference ${REF}..."
-	FASTQS=($(wildcard ${READS}/${srr}*.fastq*))
-
+	@echo ">> Aligning $(srr) using BWA index $(REF)"
+	mkdir -p $(bam)
+	FASTQS=($(wildcard $(READS)/$(srr)*.fastq*))
 	@if [ $${#FASTQS[@]} -eq 2 ]; then \
-		echo ">> Paired-end reads detected: $${FASTQS[0]} and $${FASTQS[1]}"; \
-		bwa mem -t 8 ${REF} "$${FASTQS[0]}" "$${FASTQS[1]}" \
-		| samtools sort -@ 4 -o ${bam}/${srr}_${species}.bam; \
+		echo ">> Detected paired-end reads: $${FASTQS[@]}"; \
+		bwa mem -t 8 "$(REF)" "$${FASTQS[0]}" "$${FASTQS[1]}" | samtools sort -@ 4 -o "$(bam)/$(srr)_$(species).bam"; \
 	elif [ $${#FASTQS[@]} -eq 1 ]; then \
-		echo ">> Single-end read detected: $${FASTQS[0]}"; \
-		bwa mem -t 8 ${REF} "$${FASTQS[0]}" \
-		| samtools sort -@ 4 -o ${bam}/${srr}_${species}.bam; \
+		echo ">> Detected single-end read: $${FASTQS[0]}"; \
+		bwa mem -t 8 "$(REF)" "$${FASTQS[0]}" | samtools sort -@ 4 -o "$(bam)/$(srr)_$(species).bam"; \
 	else \
-		echo "!! ERROR: No FASTQ files found for ${srr} in ${READS}"; \
+		echo "!! ERROR: No FASTQ files found for $(srr) in $(READS)"; \
 		exit 1; \
 	fi
+	samtools index "$(bam)/$(srr)_$(species).bam"
+	samtools flagstat "$(bam)/$(srr)_$(species).bam" > "$(bam)/$(srr)_$(species)_align_stats.txt"
+	@echo ">> Alignment complete: $(bam)/$(srr)_$(species).bam"
 
-	@echo ">> Indexing BAM and generating stats..."
-	samtools index ${bam}/${srr}_${species}.bam
-	samtools flagstat ${bam}/${srr}_${species}.bam > ${bam}/${srr}_${species}_align_stats.txt
-	@echo ">> Alignment complete: ${bam}/${srr}_${species}.bam"
+
 
 # Convert BAM to BedGraph + BigWig for IGV/Genome Browser
 # Works for RNA-seq (spliced alignments) or genomic reads
