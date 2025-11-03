@@ -27,7 +27,8 @@ make get_genome species=human GCF=GCF_000001405.40 REF=ref
 
 # Zika virus reference
 make get_genome species=zika GCF=GCF_000882815.3 REF=ref
-
+```
+```bash
 # Build genome index
 make genome_index species=human REF=ref/human_genome.fa
 make genome_index species=zika  REF=ref/zika_genome.fa
