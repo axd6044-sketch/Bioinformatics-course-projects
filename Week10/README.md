@@ -16,7 +16,7 @@ This pipeline automates the processing of RNA-seq data using a Makefile and desi
 ```bash
 make design PRJNA=PRJNA313294
 ```
-### 2. Download the reference genome 
+### 2. Download and index the reference genome 
 Download and index the reference genome (only needed once per species):
 ```bash
 # Human chromosome 22 (UCSC hg38)
@@ -38,16 +38,16 @@ make genome_index species=zika  REF=ref/zika_genome.fa
 
 ```bash
 # Download a subset of reads (first 100,000 for test)
-make get_fastq srr=SRR3194430 READS=reads fastqcreports=reads/fastqc_reports
+make get_fastq srr=SRR3191545 READS=reads fastqcreports=reads/fastqc_reports
 
 # Align reads
-make alignreads species=human REF=ref/human_genome READS=reads srr=SRR3194430 bam=bam
+make alignreads species=human REF=ref/human_genome READS=reads srr=SRR3191545 bam=bam
 
 # Generate BigWig for IGV visualization
-make bigwig species=human srr=SRR3194430 bam=bam REF=ref/human_genome.fa
+make bigwig species=human srr=SRR3191545 bam=bam REF=ref/human_genome.fa
 
 # Call variants using bcftools
-make call_variants species=human REF=ref/human_genome.fa bam=bam srr=SRR3194430 vcf=vcf
+make call_variants species=human REF=ref/human_genome.fa bam=bam srr=SRR3191545 vcf=vcf
 ```
 
 ## Parallel processing of multiple samples 
@@ -99,30 +99,6 @@ Load these in IGV:
  - Variants:         vcf/multisample_merged.vcf.gz
  - Coverage tracks:  bam/SRR*_human.bw
 
-## Output Files
-
-Week10/
-├── reads/
-│   ├── SRR3194430.fastq
-│   ├── fastqc_reports/
-│   │   └── SRR3194430_fastqc.html
-├── ref/
-│   ├── human_hg38.fa
-│   ├── human_hg38.gtf.gz
-│   └── ZikaVirus_genome.fa
-├── bam/
-│   ├── SRR3194430_human.bam
-│   ├── SRR3194430_human.bam.bai
-│   ├── SRR3194430_human.bw
-│   └── SRR3194430_human_align_stats.txt
-├── vcf/
-│   ├── SRR3194430_human.vcf.gz
-│   ├── SRR3194430_human.vcf.gz.tbi
-│   └── multisample_merged.vcf.gz
-└── design.csv
-
-
----
 
 #Screenshot of single vcf file
 <img src="img1.png" alt="image" width="800">
