@@ -57,35 +57,41 @@ make design:
 
 # Download reference genome
 # Usage:
-#   make get_genome species=zika  GCF=GCF_000882815.3 REF=ref
-#   make get_genome species=human GCF=GCF_009914755.1 REF=ref
+#   make get_genome species=human  GCF=GCF_000882815.3 REF=ref ACC=NC_060948.1
+#   make get_genome species=zika GCF=GCF_009914755.1 REF=ref ACC=NC_001477.1
 
 get_genome:
-	mkdir -p ${REF}
-	@echo ">> Downloading genome and annotation for $(species) ($(GCF))..."
-	datasets download genome accession ${GCF} --include genome,gtf --filename ${REF}/${species}_genome.zip
-
-	@echo ">> Extracting dataset..."
-	unzip -o ${REF}/${species}_genome.zip -d ${REF}/
-
-	@echo ">> Organizing files..."
-	mv ${REF}/ncbi_dataset/data/${GCF}/*.fna ${REF}/${species}_genome.fa
-	mv ${REF}/ncbi_dataset/data/${GCF}/*.gtf ${REF}/${species}_genome.gtf
-	rm -rf ${REF}/ncbi_dataset ${REF}/${species}_genome.zip
-	samtools faidx ${REF}/${species}_genome.fa
-
+	mkdir -p $(dir ${REF})
+	bio fetch ${ACC} --format fasta > ${REF}/${species}_genome.fa
+	@echo ">> Downloaded reference genome for $(species) ($(ACC))."
+	#download genome and annotation from NCBI Datasets
+	datasets download genome accession ${GCF} --include genome,gtf
+	unzip -n ncbi_dataset.zip -d ${REF}
+	mv ${REF}/ncbi_dataset/data/$(GCF)/* ${REF}/
+	rm -r ${REF}/ncbi_dataset
+	rm ncbi_dataset.zip
+	@echo ">> Downloaded and extracted genome and annotation for $(species) ($(GCF))."
 
 # Download and process FASTQ files (handles both single and paired-end)
 # Usage: make get_fastq srr=SRR3191545 READS=reads fastqcreports=reads/fastqc_reports
+
 get_fastq:
-	mkdir -p $(READS)
-	mkdir -p $(fastqcreports)
-	fastq-dump --split-3 --gzip -X 100000 $(srr) -O $(READS)/
-	gunzip $(READS)/*.fastq.gz || true
-	# fastqc and seqkit will operate on all FASTQ files in the reads directory
-	fastqc -o $(fastqcreports) $(READS)/*.fastq
-	seqkit stats $(READS)/*.fastq > $(reads)/${srr}_all_stats.txt
-	ls -l $(READS)
+	@echo ">> Downloading reads for ${srr}..."
+	mkdir -p ${READS}
+	mkdir -p ${fastqcreports}
+
+	@echo ">> Fetching first 100,000 reads for test..."
+	fastq-dump --split-3 --gzip -X 100000 ${srr} -O ${READS}/
+	gunzip ${READS}/*.fastq.gz || true
+
+	@echo ">> Running FastQC..."
+	fastqc -o ${fastqcreports} ${READS}/*.fastq
+
+	@echo ">> Generating read statistics..."
+	seqkit stats ${READS}/*.fastq > ${READS}/${srr}_all_stats.txt
+	cat ${READS}/${srr}_all_stats.txt
+
+	@echo ">> Done! FASTQ and QC files saved under ${READS}/"
 
 # Build genome index (supports human or Zika)
 # Usage:
@@ -96,9 +102,11 @@ genome_index:
 	@echo ">> Building genome index for $(species) using reference $(REF)..."
 ifeq ($(species),human)
 	bwa index ${REF}
+	samtools faidx ${REF}
 	@echo ">> BWA index built successfully for human genome."
 else ifeq ($(species),zika)
 	bwa index ${REF}
+	samtools faidx ${REF}
 	@echo ">> BWA index built successfully for Zika virus genome."
 else
 	@echo "Error: Unsupported species '$(species)'. Please use species=human or species=zika."
@@ -106,48 +114,28 @@ else
 endif
 
 
-# Align reads to reference genome (handles both single and paired-end)
+# Align reads to genome using BWA (supports single- or paired-end)
 # Usage:
-#   make alignreads species=human REF=ref/human_genome READS=reads srr=SRR3191545 bam=bam
-#   make alignreads species=zika  REF=ref/zika_genome READS=reads srr=SRR3191545 bam=bam
+#   make alignreads species=human REF=ref/human_genome.fa READS=reads srr=SRR3191545 bam=bam
+#   make alignreads species=zika  REF=ref/zika_genome.fa  READS=reads srr=SRR3191545 bam=bam
 
 alignreads:
 	mkdir -p ${bam}
-	@echo ">> Aligning ${srr} for ${species} using reference ${REF}..."
+	@echo ">> Aligning ${srr} for ${species} using BWA reference ${REF}..."
 	FASTQS=($(wildcard ${READS}/${srr}*.fastq*))
 
-ifeq (${species},human)
 	@if [ $${#FASTQS[@]} -eq 2 ]; then \
-		echo ">> Paired-end reads detected."; \
-		hisat2 -p 8 --dta -x ${REF} -1 "$${FASTQS[0]}" -2 "$${FASTQS[1]}" \
-		| samtools sort -@ 4 -o ${bam}/${srr}_human.bam; \
+		echo ">> Paired-end reads detected: $${FASTQS[0]} and $${FASTQS[1]}"; \
+		bwa mem -t 8 ${REF} "$${FASTQS[0]}" "$${FASTQS[1]}" \
+		| samtools sort -@ 4 -o ${bam}/${srr}_${species}.bam; \
 	elif [ $${#FASTQS[@]} -eq 1 ]; then \
-		echo ">> Single-end read detected."; \
-		hisat2 -p 8 --dta -x ${REF} -U "$${FASTQS[0]}" \
-		| samtools sort -@ 4 -o ${bam}/${srr}_human.bam; \
+		echo ">> Single-end read detected: $${FASTQS[0]}"; \
+		bwa mem -t 8 ${REF} "$${FASTQS[0]}" \
+		| samtools sort -@ 4 -o ${bam}/${srr}_${species}.bam; \
 	else \
 		echo "!! ERROR: No FASTQ files found for ${srr} in ${READS}"; \
 		exit 1; \
 	fi
-
-else ifeq (${species},zika)
-	@if [ $${#FASTQS[@]} -eq 2 ]; then \
-		echo ">> Paired-end reads detected."; \
-		bwa mem -t 8 ${REF}.fa "$${FASTQS[0]}" "$${FASTQS[1]}" \
-		| samtools sort -@ 4 -o ${bam}/${srr}_zika.bam; \
-	elif [ $${#FASTQS[@]} -eq 1 ]; then \
-		echo ">> Single-end read detected."; \
-		bwa mem -t 8 ${REF}.fa "$${FASTQS[0]}" \
-		| samtools sort -@ 4 -o ${bam}/${srr}_zika.bam; \
-	else \
-		echo "!! ERROR: No FASTQ files found for ${srr} in ${READS}"; \
-		exit 1; \
-	fi
-
-else
-	@echo "Error: Unsupported species '${species}'. Please use species=human or species=zika."
-	exit 1
-endif
 
 	@echo ">> Indexing BAM and generating stats..."
 	samtools index ${bam}/${srr}_${species}.bam
@@ -157,7 +145,7 @@ endif
 # Convert BAM to BedGraph + BigWig for IGV/Genome Browser
 # Works for RNA-seq (spliced alignments) or genomic reads
 # Usage:
-#   make bigwig species=human srr=SRR3191545 bam=bam REF=ref/human_hg38.fa
+#   make bigwig species=human srr=SRR3191545 bam=bam REF=ref/human_genome.fa
 #   make bigwig species=zika  srr=SRR3191545 bam=bam REF=ref/zika_genome.fa
 
 bigwig:
@@ -188,7 +176,7 @@ bigwig:
 
 # Call variants using bcftools
 # Usage:
-#   make call_variants species=human REF=ref/human_hg38.fa bam=bam srr=SRR3191545 vcf=vcf
+#   make call_variants species=human REF=ref/human_genome.fa bam=bam srr=SRR3191545 vcf=vcf
 #   make call_variants species=zika  REF=ref/zika_genome.fa bam=bam srr=SRR3191545 vcf=vcf
 
 call_variants:
