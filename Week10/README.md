@@ -17,33 +17,39 @@ This pipeline automates the processing of RNA-seq data using a Makefile and desi
 make design PRJNA=PRJNA313294
 ```
 ### 2. Download the reference genome 
-Download and index the reference genome (only needed once):
-
+Download and index the reference genome (only needed once per species):
 ```bash
-# download human chromosome 22 
-make get_genome species=human genome=chr22 REF=ref
-# download whole human genome
-make get_genome species=human genome=hg38_ucsc REF=ref
-# download zika genome
-make get_genome species=zika genome=GCF_000882815.3 REF=ref
+# Human chromosome 22 (UCSC hg38)
+make get_genome species=human GCF=GCF_009914755.1 REF=ref
 
-#index only human chromosome 22
-make genome_index species=human REF=ref/human_chr22.fa
-# for whole human genome
-make genome_index species=human REF=ref/human_hg38.fa
-# or for zika
-make genome_index species=zika REF=ref/ZikaVirus_genome.fa
+# Full human genome
+make get_genome species=human GCF=GCF_000001405.40 REF=ref
 
+# Zika virus reference
+make get_genome species=zika GCF=GCF_000882815.3 REF=ref
+
+# Build genome index
+make genome_index species=human REF=ref/human_genome.fa
+make genome_index species=zika  REF=ref/zika_genome.fa
 ```
+
+
 ## For processing single sample (single or paired-end), run:
 
 ```bash
-make get_fastq srr=<SRR_ID> reads=reads fastqcreports=reads/fastqc_reports
-make alignreads genome_fa=ref/hmanchr22 reads=reads srr=SRR3191544 bam=bam
-make bigwig srr=SRR3191544 bam=bam genome_fa=ref/hmanchr22
-make call_variants species=human REF=ref/human_hg38.fa bam=bam srr=SRR3194430 vcf=vcf
+# Download a subset of reads (first 100,000 for test)
+make get_fastq srr=SRR3194430 READS=reads fastqcreports=reads/fastqc_reports
 
+# Align reads
+make alignreads species=human REF=ref/human_genome READS=reads srr=SRR3194430 bam=bam
+
+# Generate BigWig for IGV visualization
+make bigwig species=human srr=SRR3194430 bam=bam REF=ref/human_genome.fa
+
+# Call variants using bcftools
+make call_variants species=human REF=ref/human_genome.fa bam=bam srr=SRR3194430 vcf=vcf
 ```
+
 ## Parallel processing of multiple samples 
 To process all samples in parallel from design.csv, make sure GNU Parallel can create temporary files. On macOS the default temp dir sometimes isn't writable from conda environments — create a per-user tmpdir and pass it with `--tmpdir`.
 
@@ -52,7 +58,7 @@ Generate the design file
 make design
 ```
  
-```
+```bash
 # Create a safe tmpdir (do this once per session)
 mkdir -p ~/parallel_tmp
 chmod 700 ~/parallel_tmp
@@ -62,36 +68,36 @@ awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
       'make get_fastq srr={} READS=reads fastqcreports=reads/fastqc_reports'
 
-# Align all samples to human chr22 (hg38 build)
+# Align all samples (human)
 awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
-      'make alignreads species=human REF=ref/human_chr22 READS=reads srr={} bam=bam'
+      'make alignreads species=human REF=ref/human_genome READS=reads srr={} bam=bam'
 
 # Generate BigWig files for visualization
 awk -F',' 'NR>1 {print $1}' design.csv \
   | parallel --tmpdir ~/parallel_tmp --jobs 2 --bar \
-      'make bigwig species=human srr={} bam=bam REF=ref/human_chr22.fa'
+      'make bigwig species=human srr={} bam=bam REF=ref/human_genome.fa'
 
-# Call variants for each human sample (per-sample)
+# Call variants for each sample
 awk -F',' 'NR>1 {print $$1}' design.csv | while read srr; do
-    make call_variants species=human REF=ref/human_chr22.fa bam=bam srr=$$srr vcf=vcf
+    make call_variants species=human REF=ref/human_genome.fa bam=bam srr=$$srr vcf=vcf
 done
 
-#Merge all individual VCFs into one multi-sample file
-# creating multisample VCF
+# Merge all individual VCFs into one multi-sample VCF
 bcftools merge vcf/*.vcf.gz -O z -o vcf/multisample_merged.vcf.gz
 bcftools index -t vcf/multisample_merged.vcf.gz
+
 
 ```
 
 Visualize in IGV or JBrowse
-# ========================================================
-# Load these in IGV:
-#   - Reference genome: ref/human_chr22.fa
-#   - Annotation file:  ref/human_hg38.gtf.gz
-#   - Aligned BAMs:     bam/SRR*_human.bam
-#   - Variants:         vcf/multisample_merged.vcf.gz
-#   - Coverage tracks:  bam/SRR*_human.bw
+ ========================================================
+Load these in IGV:
+ - Reference genome: ref/human_chr22.fa
+ - Annotation file:  ref/human_hg38.gtf.gz
+ - Aligned BAMs:     bam/SRR*_human.bam
+ - Variants:         vcf/multisample_merged.vcf.gz
+ - Coverage tracks:  bam/SRR*_human.bw
 
 ## Output Files
 
@@ -118,7 +124,7 @@ Week10/
 
 ---
 
-#Screenshot from IGV visualizing three SRR bam files and their bw files
+#Screenshot of single vcf file
 <img src="img1.png" alt="image" width="800">
 
 **Note:**
