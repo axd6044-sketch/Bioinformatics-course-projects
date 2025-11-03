@@ -20,7 +20,7 @@ make design PRJNA=PRJNA313294
 Download and index the reference genome (only needed once per species):
 ```bash
 # Human chromosome 22
-make get_genome species=human  GCF=GCF_000882815.3 REF=ref ACC=NC_060948.1
+make get_genome species=human  GCF=GCF_009914755.1 REF=ref ACC=NC_060948.1
 # Zika virus reference
 make get_genome species=zika GCF=GCF_000882815.3 REF=ref ACC=NC_012532.1
 ```

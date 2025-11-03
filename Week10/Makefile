@@ -62,7 +62,7 @@ make design:
 
 # Download reference genome
 # Usage:
-#   make get_genome species=human  GCF=GCF_000882815.3 REF=ref ACC=NC_060948.1
+#   make get_genome species=human  GCF=GCF_009914755.1REF=ref ACC=NC_060948.1
 #   make get_genome species=zika GCF=GCF_000882815.3 REF=ref ACC=NC_012532.1
 
 get_genome:
