@@ -4,8 +4,8 @@ run snpEFF to provide variant effect annotations.
 ### workflow:
 Make a design file from the BioProject accession.
 Download and index the reference (FASTA + GFF).
-readsvcf → for each SRR: download FASTQ → align → make bigwig → call variants.
-snpeff_build → build a custom snpEff database from that reference.
+get vcf files for each SRR: download FASTQ → align → make bigwig → call variants.
+snpeff_build to build a custom snpEff database from that reference.
 snpeff_run (or parallelized version) → annotate each VCF with snpEff.
 
 ### 1. Prepare design file 
@@ -77,14 +77,13 @@ cat design.csv | \
 
 the reference fasta file, bam files (SRR3191542),SRR3191542.vcf.snpeff.vcf.gz file were loaded to IGV for visualization 
 
-variant 1: SNP (C→A) at NC_060948.1:27,207,584
-low-confidence intergenic SNP
-It’s supported by only 2 reads (1 ref, 1 alt) and has a very low QUAL (~5.7), so normally filtered out or at least not interpret it biologically. snpEff calls it a MODIFIER in an intergenic region, i.e. no predicted coding effect.
+variant 1: At NC_060948.1:14,624,908 
+we see a T→C SNP supported by a single, well-mapped read (MQ 60) but with low variant quality (QUAL ~5.8). snpEff annotates it as a non-coding transcript / pseudogene MODIFIER, so there’s no predicted functional impact. Because depth=1, this variant should be treated as low confidence and would normally be filtered out.
 
 <img src="img2.png" alt="image" width="800">
 
-variant 2: A→T SNP at NC_060948.1:14,377,257
- with high QUAL but very low depth (2 reads). snpEff annotates it as an intron_variant/MODIFIER in many overlapping transcripts, so there’s no predicted protein effect; under standard depth filtering this would likely be dropped
+variant 2: At NC_060948.1:14,610,982
+ we detected a G→A SNP with strong support (DP=10, QUAL≈201, alt on both strands). snpEff annotates it as a missense_variant (MODERATE) in the TMSB4Y transcript (NM_004202.3), indicating an amino-acid change in a protein-coding exon. This is a high-confidence, potentially functional variant, unlike the low-depth intergenic/intronic calls elsewhere.
 
 <img src="img3.png" alt="image" width="800">
 
