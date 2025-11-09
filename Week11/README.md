@@ -83,7 +83,7 @@ we see a T→C SNP supported by a single, well-mapped read (MQ 60) but with low 
 <img src="img2.png" alt="image" width="800">
 
 variant 2: At NC_060948.1:14,610,982
- we detected a G→A SNP with strong support (DP=10, QUAL≈201, alt on both strands). snpEff annotates it as a missense_variant (MODERATE) in the TMSB4Y transcript (NM_004202.3), indicating an amino-acid change in a protein-coding exon. This is a high-confidence, potentially functional variant, unlike the low-depth intergenic/intronic calls elsewhere.
+ we detected a G→A SNP with strong support (DP=10, QUAL≈201, alt on both strands). snpEff annotates it as a missense_variant (MODERATE) in the TMSB4Y transcript (NM_004202.3), indicating an amino-acid change in a protein-coding exon. This is a high-confidence, potentially functional variant, unlike the low-depth intergenic/intronic calls elsewhere. It is non-synonymous.
 
 <img src="img3.png" alt="image" width="800">
 
