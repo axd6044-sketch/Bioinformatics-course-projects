@@ -1,6 +1,5 @@
-# ============================
-# Makefile for RNA-seq / mapping
-# ============================
+
+# Makefile for RNA-seq / mapping / variant calling pipeline / snpEff annotation
 
 SHELL := bash
 .ONESHELL:
@@ -97,9 +96,8 @@ get_genome:
 	echo ">> Saved GFF to $(REF_GFF)"
 
 
-# C. FASTQ download + QC
+# C. FASTQ download and QC
 #usage: make get_fastq SRR=SRR3191542 READS=reads FASTQC=reads/fastqc_reports N=100000
-
 
 STAT := $(READS)/$(SRR)_all_stats.txt
 get_fastq:
