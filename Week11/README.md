@@ -68,3 +68,28 @@ cat design.csv | \
   parallel --colsep , --header : --eta --lb -j 2 \
     make snpeff_run SPECIES=human SRR={Run}
 ```
+
+## SNPEFF results 
+
+<img src="img1.png" alt="image" width="800">
+
+## Variants observed and analyzed 
+
+the reference fasta file, bam files (SRR3191542),SRR3191542.vcf.snpeff.vcf.gz file were loaded to IGV for visualization 
+
+variant 1: SNP (C→A) at NC_060948.1:27,207,584
+low-confidence intergenic SNP
+It’s supported by only 2 reads (1 ref, 1 alt) and has a very low QUAL (~5.7), so normally filtered out or at least not interpret it biologically. snpEff calls it a MODIFIER in an intergenic region, i.e. no predicted coding effect.
+
+<img src="img2.png" alt="image" width="800">
+
+variant 2: A→T SNP at NC_060948.1:14,377,257
+ with high QUAL but very low depth (2 reads). snpEff annotates it as an intron_variant/MODIFIER in many overlapping transcripts, so there’s no predicted protein effect; under standard depth filtering this would likely be dropped
+
+<img src="img3.png" alt="image" width="800">
+
+variant 3: NC_060948.1:14,377,264 
+
+observed a G→C SNP with high variant quality (QUAL ≈ 61) but very low read depth (~2 reads). snpEff annotates it as an intron_variant/MODIFIER in multiple overlapping transcripts, so there is no predicted coding consequence. Because of the shallow coverage, this variant would typically be filtered out by standard depth filters even though the QUAL is high.
+
+<img src="img4.png" alt="image" width="800">
