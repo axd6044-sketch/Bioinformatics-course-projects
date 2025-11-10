@@ -212,7 +212,7 @@ $(SNPEFF_ANN) $(SNPEFF_HTML) $(SNPEFF_CSV): $(VCFILE) $(SNPEFF_DB)
 	bcftools index "$(SNPEFF_ANN)"
 
 #usage: make snpeff_build SPECIES=human SRR=SRR3191542 
-#usage: make snpeff_run SPECIES=zika  SRR=SRR3191542 
+#usage: make snpeff_run SPECIES=human SRR=SRR3191542
 snpeff_build: $(SNPEFF_DB)
 	@ls -lh "$(SNPEFF_DB)"
 

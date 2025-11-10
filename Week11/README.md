@@ -32,6 +32,8 @@ make genome_index SPECIES=zika  REF_FA=ref/zika_genome.fa
 ```bash
 # Download a subset of reads (first 100,000 for test)
 make getvcf SRR=SRR3191545 SPECIES=human N=100000
+#run snpeff
+make snpeff SPECIES=human SRR=SRR3191542
 ```
 
 ## Parallel processing of multiple samples 
