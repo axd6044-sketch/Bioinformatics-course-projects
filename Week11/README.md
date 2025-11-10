@@ -20,7 +20,6 @@ make get_genome SPECIES=human ACC_human=NC_060948.1 GCF_human=GCF_009914755.1
 
 # zika
 make get_genome SPECIES=zika  ACC_zika=NC_012532.1  GCF_zika=GCF_000882815.3
-
 ```
 ```bash
 # Build genome index
@@ -28,12 +27,12 @@ make genome_index SPECIES=human REF_FA=ref/human_genome.fa
 make genome_index SPECIES=zika  REF_FA=ref/zika_genome.fa
 ```
 
-
 ## For processing single sample (single or paired-end), run:
 
 ```bash
 # Download a subset of reads (first 100,000 for test)
-make readsvcf SRR=SRR3191545 SPECIES=human N=100000
+make getvcf SRR=SRR3191545 SPECIES=human N=100000
+```
 
 ## Parallel processing of multiple samples 
 To process all samples in parallel from design.csv, make sure GNU Parallel can create temporary files. On macOS the default temp dir sometimes isn't writable from conda environments — create a per-user tmpdir and pass it with `--tmpdir`.
@@ -44,14 +43,11 @@ make design PRJNA=PRJNA313294
 ```
  
 ```bash
-# Create a safe tmpdir (do this once per session)
-mkdir -p ~/parallel_tmp
-chmod 700 ~/parallel_tmp
 
-#Process every SRR in design.csv with the one-stop target readsvcf
+#Process every SRR in design.csv with the one-stop target getvcf
 cat design.csv | \
-  parallel --colsep , --header : --eta --lb --jobs 2 --tmpdir ~/parallel_tmp \
-    make readsvcf \
+  parallel --colsep , --header : --eta --lb --j 1 \
+    make getvcf \
       SRR={Run} \
       SPECIES=human \
       N=100000
