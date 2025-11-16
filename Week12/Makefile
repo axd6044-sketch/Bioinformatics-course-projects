@@ -1,12 +1,10 @@
 # Aim of makefile: calling variants for normal and tumor samples 
 # things this makefile does;
-# 1. call variants using GATK HaplotypeCaller for normal and tumor samples
-# 2. call variants using GATK Mutect2 for tumor samples
-# 3. filter variants using GATK FilterMutectCalls for tumor samples
-# 4. index the vcf files using GATK IndexFeatureFile
-# 5. organize the output files into appropriate directories
-# 6. clean up intermediate files
-# 7. provide a help target to explain the makefile usage
+# 1. Download reference genome and extract chromosome 17
+# 2. Download BAM files for normal and tumor samples and extract reads for region chr17	:7670000-7680000
+# 3. Call variants using bcftools for both normal and tumor samples
+# 4. Merge and intersect VCF files
+# 5. Compare tumor variants to gold standard DeepVariant calls
 
 SHELL = bash
 .ONESHELL:
