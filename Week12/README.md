@@ -20,7 +20,7 @@ Reference: Genecard (https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53&key
 Gene coordinates: chr17:7,565,097-7,590,856
 Size: 25,760 bases
 
-### Thid: Get reference genome 
+### Third: Get reference genome 
 
 ```bash
 #declaring variables
