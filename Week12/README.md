@@ -1,18 +1,26 @@
 ## Assignment for Week 12 : 
+Working with data from the Cancer Genome in a Bottle project and produce an evaluation.
+Paper can be found here - https://www.nature.com/articles/s41597-025-05438-2
+Link for all data - https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/data_somatic/HG008/Liss_lab/Element-AVITI-20241216/ 
 
-### Finding a region of interest
+I did the option2 homework- 
+Tasks:
+Call variants for normal and tumor samples in a region of interest
+Compare variant calls between samples and identify tumor-specific variants
+Compare your results to the gold standard DeepVariant calls (if available)
+
+### First: Finding a region of interest
 Gene I selected from the paper: TP53
  The remaining copy of this tumor suppressor gene contains a missense variant, K132T [c.395 A > C; p.Lys132Thr]. This variant is considered likely pathogenic in ClinVar. The overall genomic instability of the cell line, including large-scale deletions followed by whole genome doubling in some cells, is consistent with the known progression of tumors deficient in TP53
 
-### Look for evidence for tumor-specific mutations for this gene in the BAM file
+### Second: Look for evidence for tumor-specific mutations for this gene in the BAM file
 
 Some details about the gene:
+Reference: Genecard (https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53&keywords=TP53#localization)
 Gene coordinates: chr17:7,565,097-7,590,856
 Size: 25,760 bases
 
-Prerequisites : 
-
-### Get reference genome 
+### Thid: Get reference genome 
 
 ```bash
 #declaring variables
@@ -26,7 +34,7 @@ CHR=chr17
 
 make getref
 ```
-### Aligning with region of interest for normal and tumor tissue files
+### Fourth: Aligning with region of interest for normal and tumor tissue files
 
 ```bash 
 #declare variables
@@ -77,12 +85,12 @@ samtools flagstat ${TUMOR_BAM}
 29 + 0 with mate mapped to a different chr
 29 + 0 with mate mapped to a different chr (mapQ>=5)
 
-###  Call variants from the normal and tumor tissue files
-
+###  Task 1: Call variants from the normal and tumor tissue files
+```bash
 make variants
-
-Outputs:
 ```
+Outputs:
+```bash
 #The number of variants found in normal tissue
  bcftools view vcf/TP53-N-D-variants.vcf.gz | grep -v '^#' | wc -l
       18
@@ -93,8 +101,10 @@ bcftools view vcf/TP53-T-D-variants.vcf.gz | grep -v '^#' | wc -l
 This will also generate merged vcf files for visualization in IGV: 
 <img src="img2.png" alt="image" width="800">
 
-### Compare variant calls between samples & identify tumor-specific variants
+### Task 2: Compare variant calls between samples & identify tumor-specific variants
 ```bash
+#declare variable
+INTERSECT=vcf/intersected_variants/
 make bcftools_intersect
 ```
 Output:
@@ -114,8 +124,10 @@ grep -v '^#' vcf/intersected_variants/0003.vcf | wc -l
 Summary:
 I called variants independently in a TP53 window on chr17 using the HG008 normal (TP53-N-D) and tumor (TP53-T-D) BAMs. In this region, the normal sample harbored 18 variant sites and the tumor sample 15. Using bcftools isec, I decomposed these into 6 variants seen only in the normal sample, 3 variants seen only in the tumor sample, and 12 variants shared between normal and tumor. The three tumor-only variants represent candidate somatic TP53-region mutations in this cell line, whereas the shared variants are likely germline, present in both normal and tumor.
 
-### Compare to gold standard DeepVariant calls
+### Task 3: Compare to gold standard DeepVariant calls
 ```bash
+#declare variables
+VCF_GS=https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/data_somatic/HG008/Liss_lab/analysis/Ultima_DeepVariant-somatic-SNV-INDEL_20240822/HG008_edv_AF_recalibration.result.PASS.vcf.gz
 make compare_to_gs 
 ```
 Output:
