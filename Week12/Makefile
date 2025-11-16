@@ -30,11 +30,20 @@ INTERSECT=vcf/intersected_variants/
 
 # Help target to explain the makefile usage
 help:
-	@echo "Makefile for calling variants using GATK"
-	@echo "Targets:"
-	@echo "  all                : Call variants for normal and tumor samples, filter tumor variants, and index VCF files"
-	@echo "  clean              : Remove output directory and intermediate files"
-	@echo "  help               : Display this help message"
+	@echo "Makefile for variant calling in normal and tumor samples"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  getref               - Download and prepare the reference genome"
+	@echo "  getbam               - Download and extract alignments for normal sample"
+	@echo "  callvariants        - Call variants for normal sample"
+	@echo "  gettumorbam         - Download and extract alignments for tumor sample"
+	@echo "  calltumorvariants   - Call variants for tumor sample"
+	@echo "  bcftools_merge      - Merge VCF files from normal and tumor samples"
+	@echo "  bcftools_intersect  - Intersect VCF files from normal and tumor samples"
+	@echo "  compare_to_gs       - Compare tumor variants to gold standard DeepVariant calls"
+	@echo "  alignments		 - Run alignment extraction for both normal and tumor samples"
+	@echo "  variants		 - Run variant calling and merging for both normal and tumor samples"
+	@echo "  all                 - Run all steps in order"
 
 
 ## Getting the reference genome 
