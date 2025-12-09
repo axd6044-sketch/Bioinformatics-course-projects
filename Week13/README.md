@@ -144,6 +144,9 @@ The counts.csv file looks like this with gene names mentioned.
 
 ### Comments on count matrix 
 lines which show consistent gene expression levels 
+A screenshot of count matrix file where the IFT27 gene show consistent gene expression level
+<img src="img6.png" alt="image" width="800">
+
 
 To verify the accuracy of my count matrix, I compared the read counts for the gene MLC1 between HBR and UHR samples. In the count matrix, HBR samples show ~300 reads, whereas UHR samples have only ~10–13 reads. When viewing the same region in IGV, the HBR tracks display strong and continuous coverage across all exons with dense aligned reads, consistent with high expression. In contrast, UHR tracks show almost no coverage, matching the very low read counts in the matrix. The splice junctions in HBR samples are also clearly visible, further confirming high transcript abundance. This demonstrates that the count matrix is fully consistent with the visual evidence from the alignment tracks.
 
