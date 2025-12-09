@@ -139,7 +139,7 @@ adding the gene names to the csv file
 ```
 make counts_csv
 ```
-<img src="img.png" alt="image" width="800">
+<img src="img3.png" alt="image" width="800">
 The counts.csv file looks like this with gene names mentioned. 
 
 ### Comments on count matrix 
