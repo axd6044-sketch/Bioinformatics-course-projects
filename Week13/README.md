@@ -90,6 +90,11 @@ make alignall
 ```
 
 ### Visualizing the alignments
+<img src="img1.png" alt="image" width="800">
+The data looks good, the splice aligner HiSat2 did the job and we can see splice junctions. There is good exon coverage for this genes, some exons have low coverage possibly due to isoform specific or low expression isoforms
+
+<img src="img2.png" alt="image" width="800">
+The BigWig coverage tracks for all six RNA-seq samples is shown. The three replicates of each sample looks almost the same, the height differ a little, that is normal. the major exon peaks align perfectly across all three replicates.
 
 
 ### Count matrix 
