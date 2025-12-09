@@ -5,9 +5,9 @@ Link for all data - https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/dat
 
 I did the option2 homework- 
 Tasks:
-Call variants for normal and tumor samples in a region of interest
-Compare variant calls between samples and identify tumor-specific variants
-Compare your results to the gold standard DeepVariant calls (if available)
+1. Call variants for normal and tumor samples in a region of interest
+2. Compare variant calls between samples and identify tumor-specific variants
+3. Compare your results to the gold standard DeepVariant calls (if available)
 
 ### First: Finding a region of interest
 Gene I selected from the paper: TP53
