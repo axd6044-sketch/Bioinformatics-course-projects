@@ -139,7 +139,12 @@ adding the gene names to the csv file
 ```
 make counts_csv
 ```
+<img src="img3.png" alt="image" width="800">
+The counts.csv file looks like this with gene names mentioned. 
 
-Comments on count matrix 
+### Comments on count matrix 
 lines which show consistent gene expression levels 
 verify the counts in the count matrix are consistent with the numbers I observed in the alignment tracks
+
+<img src="img4.png" alt="image" width="800">
+<img src="img5.png" alt="image" width="800">
