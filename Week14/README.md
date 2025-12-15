@@ -91,12 +91,14 @@ Principal Component Analysis
 
 PCA revealed strong separation between experimental groups (Figure 1). The first principal component (PC1) explained 97% of the total variance, clearly distinguishing HBR and UHR samples. PC2 explained 1% of the variance, capturing minor within-group variation. Tight clustering of biological replicates indicates high reproducibility.
 
+<img src="pcafig.png" alt="image" width="800">
 Figure 1. Principal component analysis of RNA-seq samples showing clear separation between HBR and UHR groups.
 
 Heatmap Visualization
 
 Heatmap analysis revealed structured gene expression patterns that segregated by experimental condition (Figure 2). Distinct gene clusters showed reciprocal expression between HBR and UHR samples, consistent with the PCA results.
 
+<img src="heatmapfig.png" alt="image" width="800">
 Figure 2. Heatmap of significantly differentially expressed genes (FDR < 0.05). Red indicates higher relative expression and green indicates lower relative expression.
 
 Functional Enrichment
