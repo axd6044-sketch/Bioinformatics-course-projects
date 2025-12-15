@@ -46,10 +46,10 @@ Principal Component Analysis
 PCA was performed using the top 500 most variable genes.
 
 Command:
-
+```bash
 src/r/plot_pca.r -c edger.csv -d design.csv -o pca.pdf
 
-
+```
 This script uses DESeq2-based variance estimation and ggplot2 for visualization.
 
 Heatmap Visualization
@@ -57,9 +57,9 @@ Heatmap Visualization
 A heatmap of significantly differentially expressed genes was generated using scaled expression values.
 
 Command:
-
+```bash
 src/r/plot_heatmap.r -c edger.csv -d design.csv -o heatmap.pdf
-
+```
 
 Hierarchical clustering was applied to both genes and samples.
 
@@ -67,9 +67,9 @@ Functional Enrichment Analysis
 g:Profiler
 
 Significantly differentially expressed genes were submitted to g:Profiler for functional enrichment analysis.
-
+```bash
 bio gprofiler -c edger.csv -d hsapiens
-
+```
 
 Output:
 
@@ -78,9 +78,9 @@ gprofiler.csv
 Enrichr
 
 A complementary enrichment analysis was performed using Enrichr.
-
+```
 bio enrichr -c edger.csv
-
+```
 
 Output:
 
