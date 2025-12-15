@@ -1,6 +1,6 @@
 ## Week 14 assignment 
 
-Exploratory and Functional Analysis of RNA-seq Differential Expression Results
+### Exploratory and Functional Analysis of RNA-seq Differential Expression Results
 Abstract
 
 Exploratory visualization and functional enrichment are essential for interpreting RNA-seq differential expression results. Here, we analyzed significantly differentially expressed genes derived from an edgeR output to assess sample relationships and biological function. Principal component analysis (PCA) and heatmap visualization were used to characterize transcriptional structure, followed by functional enrichment analysis using g:Profiler and Enrichr. All analyses were automated using a Makefile to ensure reproducibility.
@@ -21,15 +21,15 @@ Genes with FDR < 0.05 were retained for downstream analyses.
 Software Environment
 
 All analyses were performed in the Biostar bioinfo environment:
-
+```
 micromamba activate bioinfo
-
+```
 Workflow Automation
 
 All steps were executed using a Makefile to ensure reproducibility:
-
+```
 make all
-
+```
 
 This command generates:
 
